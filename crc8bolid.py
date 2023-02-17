@@ -16,6 +16,13 @@ def crc(byte_str):
     return bytes(a[2:].upper()+byte_str.upper()+'01','ascii')
 
 
+def reverse_key(key):
+    # Реверсируем ключ
+    for _ in range(int(len(key) / 2) - 1):
+        key = key[0:_ * 2] + key[-2:] + key[_ * 2:-2]
+    return key
+
+
 
 if __name__ == '__main__':
     print(crc('00550073D712'))
