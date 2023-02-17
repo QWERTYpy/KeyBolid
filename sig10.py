@@ -2,7 +2,14 @@ import binascii
 import crc8bolid
 
 
-def write_key(number, permition_list): # [[key, perm]]
+def write_key(number, permition_list): # [[key, perm]] 000000AABBCC AABBCC
+    """
+    AA  1   2   3   4
+    BB                  5   6   7   8
+    CC                                  9   10
+    вз  02  08  20  80  02  08  20  80  02  08
+    сн  01  04  10  40  01  04  10  40  01  04
+    """
     # Заголовок файла
     b_head_start = b'4b657973205369676e616c2d313020762e312e3030'
     b_head_end = b'00000000f91900904e047780f81900602e9001000000000a'
