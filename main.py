@@ -1,15 +1,31 @@
-import sig10
-import c20004
-import binascii
+import tkinter as tk
 
-permition_list = [['00550073d712', '081100'],
-                  ['001100596a7f', '182200']]
 
-# sig10.write_key('101', permition_list)
-c20004.write_key('444', permition_list)
-# # Вывод файла в консоль
-# file = open('_2.ki', 'rb')
-# for line in file:
-#     # print(line)
-#     print(binascii.hexlify(line))
+def on_closing():
+    # Действия при закрытии окна
+    print("Закрытие окна")
+    root.destroy()  # Закрыть окно
 
+
+
+
+root = tk.Tk()
+root.protocol("WM_DELETE_WINDOW", on_closing)
+root.title(("KeyBolid - v.1.0"))
+root.geometry("1210x608+100+100")  # Создаем окно
+root.resizable(False, False)  # Запрещаем изменять размер окна
+root.configure(background='#ffffff')  # Устанавливаем цвет фона
+
+# Меню
+def main_menu_save_object():
+    print("Сохранить")
+
+main_menu =tk.Menu(root)
+root.config(menu=main_menu)
+main_menu.add_command(label="Сохранить", command=main_menu_save_object)
+
+
+# - Меню
+
+
+root.mainloop()  # Запускаем отображение
