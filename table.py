@@ -4,9 +4,11 @@ import tkinter as tk
 
 
 class Table:
-    def __init__(self, root, object_list):
+    def __init__(self, root, info_frame, object_list, person_list):
         self.root = root
         self.object_list = object_list
+        self.person_list = person_list
+        self.info_frame = info_frame
         self.object_list_len = len(object_list)
         # Сортировка по Объектам
         self.combobox_sort()
@@ -18,8 +20,8 @@ class Table:
     def main_table(self):
         # Составляем колонки
         table_column = ('surname', 'name', 'patronymic', 'hex_key')
-        self.main_table = ttk.Treeview(columns=table_column, show='headings')
-        self.main_table.grid(row=5, column=0, columnspan=4, sticky="nsew")
+        self.main_table = ttk.Treeview(self.root, columns=table_column, show='headings')
+        self.main_table.grid(row=2, column=0, columnspan=4, rowspan=25, sticky="nsew")
 
         # определяем заголовки
         self.main_table.heading('name', text='Имя', anchor=tk.W)
@@ -30,6 +32,14 @@ class Table:
         self.main_table.column("#2", stretch=tk.NO, width=200)
         self.main_table.column("#3", stretch=tk.NO, width=200)
         self.main_table.column("#4", stretch=tk.NO, width=200)
+        # Добавляем прокрутку
+        self.scrollbar = ttk.Scrollbar(self.root, orient=tk.VERTICAL, command=self.main_table.yview)
+        self.main_table.configure(yscroll=self.scrollbar.set, height=25)
+        self.scrollbar.grid(row=2, column=4, rowspan=25, sticky="ns")
+        # Составляем данные для отображения
+        self.people_table = [(_.surname, _.name, _.patronymic, _.key) for _ in self.person_list]
+        for person in self.people_table:
+            self.main_table.insert("", tk.END, values=person)
 
     def search_table(self):
         self.entry_name = ttk.Entry(self.root)

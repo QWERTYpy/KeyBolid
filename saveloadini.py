@@ -6,7 +6,7 @@ def load_person_ini():
     # Загружаем объекты из файла
     config = configparser.ConfigParser()
     config.read('person.ini', encoding='utf-8')
-    list_obj = []
+    list_person = []
     for hex_key in config.sections():
         pers = Person()
         pers.name = config[hex_key]['name']
@@ -21,8 +21,9 @@ def load_person_ini():
             num_obj, id_obj, xo_obj, perm_obj = map(str.strip, config[hex_key]['permission'].split(','))
             pers.permission[num_obj] = [id_obj, xo_obj, perm_obj]
         # pers.show()
-        list_obj.append(pers)
-    return list_obj
+        list_person.append(pers)
+    return list_person
+
 
 def load_object_ini():
     # Загружаем объекты из файла
@@ -42,5 +43,5 @@ def load_object_ini():
     return list_obj
 
 if __name__ == '__main__':
-    for _ in load_object_ini():
-        _.show()
+    aa =load_person_ini()
+    # print(list_person_table(aa))
