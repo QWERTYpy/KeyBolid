@@ -24,7 +24,7 @@ root.configure(background='#ffffff')  # Устанавливаем цвет фо
 # Создаем инфополе
 infoframe = i_f.InfoFrame(root)
 # Создаем главное меню
-main_menu = mm.MainMenu(root, infoframe)
+main_menu = mm.MainMenu(root, infoframe, person_list)
 # Создаем основную таблицу
 table = tbl.Table(root, infoframe, object_list, person_list)
 

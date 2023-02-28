@@ -70,9 +70,9 @@ class Table:
         self.main_table.delete(*self.main_table.get_children())
         if self.entry_surname.get() or self.entry_name or self.entry_patronymic or self.entry_hex:
             self.people_table = [(_.surname, _.name, _.patronymic, _.key) for _ in self.person_list
-                                 if self.entry_surname.get() in _.surname
-                                 and self.entry_name.get() in _.name
-                                 and self.entry_patronymic.get() in _.patronymic
+                                 if self.entry_surname.get().lower() in _.surname.lower()
+                                 and self.entry_name.get().lower() in _.name.lower()
+                                 and self.entry_patronymic.get().lower() in _.patronymic.lower()
                                  and self.entry_hex.get() in _.key
                                  and (self.object_main in _.permission.keys() or self.object_main == '000')]
         else:
