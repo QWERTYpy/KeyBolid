@@ -16,10 +16,10 @@ def load_person_ini():
         if ';' in config[hex_key]['permission']:
             for _ in config[hex_key]['permission'].split(';'):
                 num_obj, id_obj, xo_obj, perm_obj = map(str.strip, _.split(','))
-                pers.permission[num_obj] = [id_obj, xo_obj, perm_obj]
+                pers.permission[id_obj] = [num_obj, xo_obj, perm_obj]
         else:
             num_obj, id_obj, xo_obj, perm_obj = map(str.strip, config[hex_key]['permission'].split(','))
-            pers.permission[num_obj] = [id_obj, xo_obj, perm_obj]
+            pers.permission[id_obj] = [num_obj, xo_obj, perm_obj]
         # pers.show()
         list_person.append(pers)
     return list_person
@@ -44,4 +44,6 @@ def load_object_ini():
 
 if __name__ == '__main__':
     aa =load_person_ini()
+    for _ in aa:
+        print(_.permission)
     # print(list_person_table(aa))

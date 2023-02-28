@@ -6,7 +6,7 @@ class Person:
         self.surname = ''  # Фамилия
         self.patronymic = ''  # Отчество
         self.key = b''  # Ключ
-        self.permission = {}  # Права доступа # Номер прибора: [id, ХО, Доступ]
+        self.permission = {}  # Права доступа # id: [Номер прибора, ХО, Доступ]
 
     def show(self):
         print(self.name,self.surname,self.patronymic,self.key,self.permission)
