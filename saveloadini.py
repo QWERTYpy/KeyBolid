@@ -12,7 +12,8 @@ def load_person_ini():
         pers.name = config[hex_key]['name']
         pers.surname = config[hex_key]['surname']
         pers.patronymic = config[hex_key]['patronymic']
-        pers.key = bytes(hex_key, 'ascii')
+        # pers.key = bytes(hex_key, 'ascii')
+        pers.key = hex_key
         if ';' in config[hex_key]['permission']:
             for _ in config[hex_key]['permission'].split(';'):
                 num_obj, id_obj, xo_obj, perm_obj = map(str.strip, _.split(','))

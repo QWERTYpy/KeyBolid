@@ -1,6 +1,7 @@
 # Класс отвечающий за вывод основной таблицы данных
 from tkinter import ttk
 import tkinter as tk
+import frame_person as fp
 
 
 class Table:
@@ -42,6 +43,27 @@ class Table:
         for person in self.people_table:
             self.main_table.insert("", tk.END, values=person)
 
+        self.main_table.bind("<Double-Button-1>", self.left_button_double)
+
+    def left_button_double(self,event):
+        # print(self.main_table.selection())
+        print(self.main_table.item(self.main_table.selection())['values'][3])
+        print(self.object_main)
+        frame_person =fp.FramePerson(self.root, self.main_table.item(self.main_table.selection())['values'][3],
+                                     self.object_main,
+                                     self.person_list,
+                                     self.object_list)
+
+        # descr.geometry(f"200x180+{self.position_cursor_old_x + int(x) + 10}+{self.position_cursor_old_y + int(y)}")
+        frame_person.geometry("500x180+50+50")
+        frame_person.title('Редактирование доступа')
+        frame_person.grab_set()
+        frame_person.wait_window()
+        if frame_person.flag_change:
+            self.search_table_action()
+
+
+
     def search_table_action(self):
         # self.main_table.delete(self.main_table.selection()[0])
         # Очищаем
@@ -51,7 +73,7 @@ class Table:
                                  if self.entry_surname.get() in _.surname
                                  and self.entry_name.get() in _.name
                                  and self.entry_patronymic.get() in _.patronymic
-                                 and self.entry_hex.get() in _.key.decode("utf-8")
+                                 and self.entry_hex.get() in _.key
                                  and (self.object_main in _.permission.keys() or self.object_main == '000')]
         else:
             self.people_table = [(_.surname, _.name, _.patronymic, _.key) for _ in self.person_list
