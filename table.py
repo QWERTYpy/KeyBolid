@@ -1,3 +1,4 @@
+# Класс отвечающий за вывод основной таблицы данных
 from tkinter import ttk
 import tkinter as tk
 
@@ -7,20 +8,16 @@ class Table:
         self.root = root
         self.object_list = object_list
         self.object_list_len = len(object_list)
-        # - Меню
         # Сортировка по Объектам
         self.combobox_sort()
         # Поиск
         self.search_table()
-        # - Поиск
         # Отображаем таблицу
         self.main_table()
 
     def main_table(self):
-        # определяем столбцы
         # Составляем колонки
         table_column = ('surname', 'name', 'patronymic', 'hex_key')
-
         self.main_table = ttk.Treeview(columns=table_column, show='headings')
         self.main_table.grid(row=5, column=0, columnspan=4, sticky="nsew")
 
@@ -49,8 +46,10 @@ class Table:
         self.entry_hex.grid(row=1, column=3, sticky=tk.NW)
 
     def combobox_sort(self):
+        # Создаем метку с описанием
         self.label_obj = ttk.Label(self.root, text="Выберите прибор:", background='white')
         self.label_obj.grid(row=0, column=0, sticky=tk.W)
+        # Создаем выпадающий список
         combobox_obj_val = 'Все',
         combobox_obj_val += tuple(
             f"{self.object_list[_].num} - {self.object_list[_].name}" for _ in range(self.object_list_len))
@@ -60,10 +59,9 @@ class Table:
         self.combobox_obj['values'] = combobox_obj_val
         self.combobox_obj['state'] = 'readonly'
         self.combobox_obj.grid(row=0, column=1, sticky=tk.W)
-
+        # Создаем кнопку для взаимодействия
         self.combobox_btn = ttk.Button(self.root, text='Выбрать', command=self.combobox_btn_press)
         self.combobox_btn.grid(row=0, column=2)
-
 
     def combobox_btn_press(self):
         print(self.combobox_obj_var.get())
