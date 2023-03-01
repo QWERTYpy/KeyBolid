@@ -11,8 +11,8 @@ class Signal10:
         ttk.Label(self.root, text="Взятие").place(x=0, y=160)
         ttk.Label(self.root, text="Снятие").place(x=0, y=190)
         self.checkbox_list = person_cur.get_check_10(obj)
-        for _ in range(20):
-            print(self.checkbox_list[_].get())
+        # for _ in range(20):
+        #     print(self.checkbox_list[_].get())
         i = -1
         for _ in range(10):
             i += 1
@@ -21,5 +21,8 @@ class Signal10:
             i += 1
             # self.checkbox_list.append(tk.IntVar())
             ttk.Checkbutton(self.root, variable=self.checkbox_list[i]).place(x=f"{70 + _ * 30}", y=160)
+
+    def get_checkbox(self):
+        return self.checkbox_list
 
 

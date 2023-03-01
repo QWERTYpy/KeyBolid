@@ -10,6 +10,7 @@ class FramePerson(tk.Toplevel):
         self.object = object
         self.person_list = person_list
         self.object_list = object_list
+        # self.checkbox_list = []
         self.object_cur = ''
         for __ in self.object_list:
             if __.id == self.object:
@@ -47,6 +48,7 @@ class FramePerson(tk.Toplevel):
         self.obj_text = tk.Text(self, width=44, height=4)
         self.obj_text.place(x=10, y=230)
         self.obj_text.insert(1.0, obj.comment)
+        self.obj_text.configure(state=tk.DISABLED)
 
         # checkbox_list.append(tk.IntVar())
         # checkbox_list[i].set(1)
@@ -88,9 +90,9 @@ class FramePerson(tk.Toplevel):
 
     def click_btn_save(self):
         self.flag_change = True
-        for _ in self.person_list:
-            if _.key == self.key:
-                _.name = self.entry_name.get()
-                _.surname = self.entry_surname.get()
-                _.patronymic = self.entry_patr.get()
-                _.key = self.entry_hex.get()
+
+        self.person_cur.name = self.entry_name.get()
+        self.person_cur.surname = self.entry_surname.get()
+        self.person_cur.patronymic = self.entry_patr.get()
+        self.person_cur.key = self.entry_hex.get()
+        self.person_cur.permission[self.object_cur.id][2] = self.person_cur.convert_check_10(self.object_signl10.get_checkbox())
