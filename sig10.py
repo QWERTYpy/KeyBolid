@@ -40,6 +40,10 @@ def write_key(number, permition_list): # [[key, perm]] 000000AABBCC AABBCC
     # Закрываем файл
     file_new.close()
 
+if __name__ == '__main__':
+    permition_list = [['00550073d712', '330000']]
+    write_key('10', permition_list)
+
 
 
 

@@ -47,6 +47,8 @@ class Table:
 
     def left_button_double(self,event):
         # print(self.main_table.selection())
+        if self.object_main == '000':
+            return False
         print(self.main_table.item(self.main_table.selection())['values'][3])
         print(self.object_main)
         frame_person =fp.FramePerson(self.root, self.main_table.item(self.main_table.selection())['values'][3],
@@ -55,7 +57,7 @@ class Table:
                                      self.object_list)
 
         # descr.geometry(f"200x180+{self.position_cursor_old_x + int(x) + 10}+{self.position_cursor_old_y + int(y)}")
-        frame_person.geometry("500x180+50+50")
+        frame_person.geometry("400x400+50+50")
         frame_person.title('Редактирование доступа')
         frame_person.grab_set()
         frame_person.wait_window()

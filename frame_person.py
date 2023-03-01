@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
+import object
+from signal10 import Signal10
 # Всплывающее меню при создании или редактировании информации о объекте
 class FramePerson(tk.Toplevel):
     def __init__(self, parent, key, object, person_list, object_list):
@@ -8,42 +10,81 @@ class FramePerson(tk.Toplevel):
         self.object = object
         self.person_list = person_list
         self.object_list = object_list
-        self.create_frame()
-        self.filling_person()
-        self.flag_change = False
-
-    def filling_person(self):
+        self.object_cur = ''
+        for __ in self.object_list:
+            if __.id == self.object:
+                self.object_cur = __
         for _ in self.person_list:
             if _.key == self.key:
-                self.entry_name.insert(0,_.name)
-                self.entry_surname.insert(0,_.surname)
-                self.entry_patr.insert(0,_.patronymic)
-                self.entry_hex.insert(0,_.key)
+                self.person_cur = _
+
+        if self.object_cur.type == '4':
+            pass
+        self.create_frame()
+        self.filling_person()
+        if self.object_cur.type == '10':
+            self.bolid_10(self.object_cur)
+        self.flag_change = False
+        self.btn_save = ttk.Button(self, text='Сохранить', command=self.click_btn_save)
+        self.btn_save.place(x=300,y=340)
+        # self.btn_save.grid(row=10, column=10)
+
+
+    def filling_person(self):
+        self.entry_name.insert(0,self.person_cur.name)
+        self.entry_surname.insert(0,self.person_cur.surname)
+        self.entry_patr.insert(0,self.person_cur.patronymic)
+        self.entry_hex.insert(0,self.person_cur.key)
+
+
+    def bolid_10(self, obj: object.ObjectBolid):
+        ttk.Label(self, text="Настройка:").place(x=0, y=90)
+        if obj.type == '10':
+            obj_type = 'Сигнал10'
+        ttk.Label(self, text=obj_type).place(x=100, y=90)
+        ttk.Label(self, text=obj.name).place(x=200, y=90)
+        self.object_signl10 = Signal10(self,self.person_cur, obj.id)
+        self.obj_text = tk.Text(self, width=44, height=4)
+        self.obj_text.place(x=10, y=230)
+        self.obj_text.insert(1.0, obj.comment)
+
+        # checkbox_list.append(tk.IntVar())
+        # checkbox_list[i].set(1)
+
+        # ttk.Label(self, text="Шлейф").place
+        # for _ in range(10):
+        #     ttk.Label(self, text=f"{_+1}",width=4, background='white').grid(row=5, column=f"{3+_}")
 
     def create_frame(self):
         self.label_surname = ttk.Label(self, text="Фамилия:")
-        self.label_surname.grid(row=0, column=0, sticky='w')
+        self.label_surname.place(x=0,y=0)
+        # self.label_surname.grid(row=0, column=0, columnspan=5, sticky='w')
         self.entry_surname = ttk.Entry(self)
-        self.entry_surname.grid(row=0, column=1)
+        self.entry_surname.place(x=100, y=0)
 
         self.label_name = ttk.Label(self, text="Имя:")
-        self.label_name.grid(row=1, column=0, sticky='w')
+        # self.label_name.grid(row=1, column=0, columnspan=5, sticky='w')
+        self.label_name.place(x=0, y=20)
         self.entry_name = ttk.Entry(self)
-        self.entry_name.grid(row=1, column=1)
-        # self.entry_name.insert(0,"333")
-
+        self.entry_name.place(x=100,y=20)
+        # self.entry_name.grid(row=1, column=5)
+        # # self.entry_name.insert(0,"333")
+        #
         self.label_patr = ttk.Label(self, text="Отчество:")
-        self.label_patr.grid(row=2, column=0, sticky='w')
+        self.label_patr.place(x=0,y=40)
+        # self.label_patr.grid(row=2, column=0, columnspan=5,sticky='w')
         self.entry_patr = ttk.Entry(self)
-        self.entry_patr.grid(row=2, column=1)
-
+        self.entry_patr.place(x=100,y=40)
+        # self.entry_patr.grid(row=2, column=5, columnspan=5)
+        #
         self.label_hex = ttk.Label(self, text="Ключ:")
-        self.label_hex.grid(row=3, column=0, sticky='w')
+        self.label_hex.place(x=0,y=60)
+        # self.label_hex.grid(row=3, column=0, columnspan=5, sticky='w')
         self.entry_hex = ttk.Entry(self)
-        self.entry_hex.grid(row=3, column=1)
+        self.entry_hex.place(x=100, y=60)
+        # self.entry_hex.grid(row=3, column=5, columnspan=5)
 
-        self.btn_save = ttk.Button(self, text='Сохранить', command=self.click_btn_save)
-        self.btn_save.grid(row=10, column=10)
+
 
     def click_btn_save(self):
         self.flag_change = True
