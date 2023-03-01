@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 import object
-from signal10 import Signal10
+from bolid_perm import Signal10, C2000_4
 # Всплывающее меню при создании или редактировании информации о объекте
 class FramePerson(tk.Toplevel):
     def __init__(self, parent, key, object, person_list, object_list):
@@ -19,10 +19,11 @@ class FramePerson(tk.Toplevel):
             if _.key == self.key:
                 self.person_cur = _
 
-        if self.object_cur.type == '4':
-            pass
+
         self.create_frame()
         self.filling_person()
+        if self.object_cur.type == '4':
+            self.bolid_4(self.object_cur)
         if self.object_cur.type == '10':
             self.bolid_10(self.object_cur)
         self.flag_change = False
@@ -36,6 +37,19 @@ class FramePerson(tk.Toplevel):
         self.entry_surname.insert(0,self.person_cur.surname)
         self.entry_patr.insert(0,self.person_cur.patronymic)
         self.entry_hex.insert(0,self.person_cur.key)
+
+    def bolid_4(self, obj: object.ObjectBolid):
+        ttk.Label(self, text="Настройка:").place(x=0, y=90)
+        if obj.type == '4':
+            obj_type = 'C2000-4'
+        ttk.Label(self, text=obj_type).place(x=100, y=90)
+        ttk.Label(self, text=obj.name).place(x=200, y=90)
+
+        self.object_c2000_4 = C2000_4(self, self.person_cur, obj.id)
+        self.obj_text = tk.Text(self, width=44, height=4)
+        self.obj_text.place(x=10, y=230)
+        self.obj_text.insert(1.0, obj.comment)
+        self.obj_text.configure(state=tk.DISABLED)
 
 
     def bolid_10(self, obj: object.ObjectBolid):
@@ -95,4 +109,7 @@ class FramePerson(tk.Toplevel):
         self.person_cur.surname = self.entry_surname.get()
         self.person_cur.patronymic = self.entry_patr.get()
         self.person_cur.key = self.entry_hex.get()
-        self.person_cur.permission[self.object_cur.id][2] = self.person_cur.convert_check_10(self.object_signl10.get_checkbox())
+        if self.object_cur.type == '10':
+            self.person_cur.permission[self.object_cur.id][2] = self.person_cur.convert_check_10(self.object_signl10.get_checkbox())
+        if self.object_cur.type == '4':
+            self.person_cur.permission[self.object_cur.id][2] = self.person_cur.convert_check_4(self.object_c2000_4.get_checkbox(),self.object_c2000_4.get_perm())

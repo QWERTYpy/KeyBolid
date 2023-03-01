@@ -69,6 +69,54 @@ class Person:
 
         return self.chk_list
 
+    def get_check_4(self,id):
+        permission = self.permission[id][2]
+        self.chk_list = []
+        # print(permission[2:4])
+
+        bin_perm = bin(int(permission[2:4], 16))
+        # print(bin_perm)
+        list_bin_perm = list(bin_perm[:1:-1])
+
+        if len(list_bin_perm) < 8:
+            for _ in range(8-len(list_bin_perm)):
+                list_bin_perm.append('0')
+
+        for _ in range(8):
+            self.chk_list.append(tk.IntVar(value=list_bin_perm[_]))
+
+        return self.chk_list
+
+    def get_perm(self, id):
+        perm = self.permission[id][2][0:2]
+        if perm == '10' or perm == '18':
+            return tk.IntVar(value=1)
+        else:
+            return tk.IntVar(value=0)
+
+
+    def convert_check_4(self,chk_list, perm):
+        if perm.get():
+            hex_A = '10'
+        else:
+            hex_A = '00'
+        list_bin_perm = []
+        for _ in range(len(chk_list)):
+            list_bin_perm.append(chk_list[_].get())
+
+        str_bin = ''.join(map(str, list_bin_perm[::-1]))
+        str_bin = '0b' + str_bin
+        hex_B = hex(int(str_bin, 2))[2:]
+        if len(hex_B) < 2:
+            hex_B='0'+hex_B
+
+        if hex_B != '00':
+            if hex_A == '10':
+                hex_A = '18'
+            if hex_A == '00':
+                hex_A = '08'
+        return hex_A+hex_B+'00'
+
 if __name__ == '__main__':
     per = Person()
-    per.get_check_10()
+    per.get_check_4()
