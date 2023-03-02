@@ -51,12 +51,13 @@ class MainMenu:
         flag_key_add = False
         filepath = filedialog.askopenfilename()
         line_cursor = 0
+        buffer_str = b''
+        cursor_str = False
         if filepath != "":
             file = open(filepath, 'rb')
             for line in file:
                 line_cursor += 1
                 if line_cursor == 1:
-
                     math = re.search(r'Keys.*v.\d.\d\d', line.decode('ansi'))
                     _, type_obj, ver = math[0].split(' ')
                     # print(name,ver)
@@ -74,15 +75,38 @@ class MainMenu:
                         frame_object.grab_set()
                         frame_object.wait_window()
                 self.info_frame.title_left_down_text.set(f"Загрузка строк - {line_cursor}.")
-                if line_cursor in list(range(4, 2000, 3)):
-                    # print(len(binascii.hexlify(line)), binascii.hexlify(line))
-                    if type_obj == "Signal-10":
-                        self.file_key = crc.reverse_key(binascii.hexlify(line)[242:254])
-                        self.file_perm = binascii.hexlify(line)[256:262]
-                    if type_obj == 'S2000-4':
-                        self.file_key = crc.reverse_key(binascii.hexlify(line)[214:226])
-                        self.file_perm =binascii.hexlify(line)[228:234]
-                    flag_key_add = True
+
+                if len(binascii.hexlify(line)) == 48:
+                    cursor_str = True
+                    continue
+                if cursor_str:
+                    buffer_str += line
+
+                    if type_obj == "Signal-10" and len(binascii.hexlify(buffer_str)) == 304 or len(binascii.hexlify(buffer_str)) == 262:
+                        cursor_str = False
+                        self.file_key = crc.reverse_key(binascii.hexlify(buffer_str)[242:254])
+                        self.file_perm = binascii.hexlify(buffer_str)[256:262]
+                        buffer_str = b''
+                        flag_key_add = True
+
+                    if type_obj == 'S2000-4' and len(binascii.hexlify(buffer_str)) == 346 or len(binascii.hexlify(buffer_str)) == 276:
+                        cursor_str = False
+
+                        self.file_key = crc.reverse_key(binascii.hexlify(buffer_str)[214:226])
+                        self.file_perm = binascii.hexlify(buffer_str)[228:234]
+                        buffer_str = b''
+                        flag_key_add = True
+
+                # if line_cursor in list(range(4, 2000, 3)):
+                #     # print(len(binascii.hexlify(line)), binascii.hexlify(line))
+                #     if type_obj == "Signal-10":
+                #         self.file_key = crc.reverse_key(binascii.hexlify(line)[242:254])
+                #         self.file_perm = binascii.hexlify(line)[256:262]
+                #     if type_obj == 'S2000-4':
+                #         self.file_key = crc.reverse_key(binascii.hexlify(line)[214:226])
+                #         self.file_perm =binascii.hexlify(line)[228:234]
+                if flag_key_add:
+                    # flag_key_add = False
                     self.file_key = self.file_key.decode('ansi')
                     self.file_perm = self.file_perm.decode('ansi')
                     for _ in self.person_list:
@@ -103,6 +127,7 @@ class MainMenu:
                         if frame_object.new_object:
                             new_person.permission[frame_object.new_object.id] = [frame_object.new_object.num, '000000', self.file_perm]  # Права доступа # id: [Номер прибора, ХО, Доступ]
                         self.person_list.append(new_person)
+                        flag_key_add = False
             # self.table.search_table_action()
             self.table.reboot_table()
 

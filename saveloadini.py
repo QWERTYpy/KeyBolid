@@ -5,7 +5,7 @@ import os
 
 def load_person_ini():
     # Загружаем объекты из файла
-    path = 'person2.ini'
+    path = 'person.ini'
     list_person = []
     if not os.path.exists(path):
         return list_person
@@ -28,7 +28,7 @@ def load_person_ini():
 
 def save_person_ini(list_person):
     # Сохраняем созданные объекты в файл
-    path = 'person2.ini'
+    path = 'person.ini'
     config = configparser.ConfigParser()
     for _ in list_person:
         str_permission = ''
