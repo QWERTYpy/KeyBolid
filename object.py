@@ -8,6 +8,7 @@ class ObjectBolid:
         self.name = ''  # Название
         self.type = 0  # Тип прибора 4/10
         self.ver = ''  # Версия
+        self.interface = 0 # 0 Если не нужен паразитный бит, 1 Если нужен
         self.comment = ''  # Комментарий
 
 

@@ -1,11 +1,16 @@
 import configparser
 from person import Person
 from object import ObjectBolid
+import os
 
 def load_person_ini():
     # Загружаем объекты из файла
+    path = 'person2.ini'
+    list_person = []
+    if not os.path.exists(path):
+        return list_person
     config = configparser.ConfigParser()
-    config.read('person2.ini', encoding='utf-8')
+    config.read(path, encoding='utf-8')
     list_person = []
     for hex_key in config.sections():
         pers = Person()
@@ -23,6 +28,7 @@ def load_person_ini():
 
 def save_person_ini(list_person):
     # Сохраняем созданные объекты в файл
+    path = 'person2.ini'
     config = configparser.ConfigParser()
     for _ in list_person:
         str_permission = ''
@@ -36,15 +42,38 @@ def save_person_ini(list_person):
 
 
     # shutil.copy('example.ini', 'example_tmp.ini')
-    with open('person2.ini', 'w', encoding='utf-8') as configfile:
+    with open(path, 'w', encoding='utf-8') as configfile:
+        config.write(configfile)
+
+def save_object_ini(list_object):
+    # Сохраняем созданные объекты в файл
+    path = 'object.ini'
+    config = configparser.ConfigParser()
+    for _ in list_object:
+        str_permission = ''
+        config[f"{_.id}"] = {'num': _.num,
+                              'name': _.name,
+                              'type': _.type,
+                             'ver': _.ver,
+                             'interface': _.interface,
+                              'comment': _.comment}
+
+
+
+    # shutil.copy('example.ini', 'example_tmp.ini')
+    with open(path, 'w', encoding='utf-8') as configfile:
         config.write(configfile)
 
 
 def load_object_ini():
     # Загружаем объекты из файла
-    config = configparser.ConfigParser()
-    config.read('object.ini', encoding='utf-8')
+    path = 'object.ini'
     list_obj = []
+    if not os.path.exists(path):
+        return list_obj
+    config = configparser.ConfigParser()
+    config.read(path, encoding='utf-8')
+
     for id_obj in config.sections():
         obj = ObjectBolid()
         obj.id = id_obj
@@ -52,6 +81,7 @@ def load_object_ini():
         obj.name = config[id_obj]['name']
         obj.type = config[id_obj]['type']
         obj.ver = config[id_obj]['ver']
+        obj.interface = config[id_obj]['interface']
         obj.comment = config[id_obj]['comment']
         # pers.show()
         list_obj.append(obj)
