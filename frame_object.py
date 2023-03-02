@@ -13,6 +13,7 @@ class FrameObject(tk.Toplevel):
         self.object_list = object_list
         self.create_frame()
         self.flag_change = False
+        self.new_object = None
 
     def create_frame(self):
         self.label_num = ttk.Label(self, text="Номер:")
@@ -68,5 +69,6 @@ class FrameObject(tk.Toplevel):
             obj.ver = self.ver
 
             obj.comment = self.obj_text.get("1.0",tk.END)
+            self.new_object = obj
             self.object_list.append(obj)
             break

@@ -12,6 +12,7 @@ class Person:
     def show(self):
         print(self.name,self.surname,self.patronymic,self.key,self.permission)
 
+
     def convert_check_10(self,chk_list):
         list_bin_perm = []
         for _ in range(len(chk_list)):
@@ -40,7 +41,7 @@ class Person:
         # print(list_bin_perm_tmp, str_bin,hex_A, hex_B, hex_C)
         return hex_A+hex_B+hex_C
 
-    def get_check_10(self,id):
+    def get_check_10(self, id):
         permission = self.permission[id][2]
         self.chk_list = []
         # print(permission[4:6])

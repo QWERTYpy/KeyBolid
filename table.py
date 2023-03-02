@@ -49,9 +49,9 @@ class Table:
         # print(self.main_table.selection())
         if self.object_main == '000':
             return False
-        print(self.main_table.item(self.main_table.selection())['values'][3])
-        print(self.object_main)
-        frame_person =fp.FramePerson(self.root, self.main_table.item(self.main_table.selection())['values'][3],
+        # print(self.main_table.item(self.main_table.selection())['values'][3])
+        # print(self.object_main)
+        frame_person =fp.FramePerson(self.root, str(self.main_table.item(self.main_table.selection())['values'][3]),
                                      self.object_main,
                                      self.person_list,
                                      self.object_list)
@@ -64,6 +64,20 @@ class Table:
         if frame_person.flag_change:
             self.search_table_action()
 
+    def reboot_table(self):
+
+        combobox_obj_val = 'Все',
+        self.object_dict = {f"{self.object_list[_].num} - {self.object_list[_].name}": self.object_list[_].id for _ in
+                            range(len(self.object_list))}
+        combobox_obj_val += tuple(self.object_dict.keys())
+
+        self.combobox_obj['values'] = combobox_obj_val
+
+        self.main_table.delete(*self.main_table.get_children())
+        # Составляем данные для отображения
+        self.people_table = [(_.surname, _.name, _.patronymic, _.key) for _ in self.person_list]
+        for person in self.people_table:
+            self.main_table.insert("", tk.END, values=person)
 
 
     def search_table_action(self):

@@ -23,10 +23,11 @@ root.resizable(False, False)  # Запрещаем изменять размер
 root.configure(background='#ffffff')  # Устанавливаем цвет фона
 # Создаем инфополе
 infoframe = i_f.InfoFrame(root)
-# Создаем главное меню
-main_menu = mm.MainMenu(root, infoframe, person_list, object_list)
+
 # Создаем основную таблицу
-table = tbl.Table(root, infoframe, object_list, person_list)
+table = tbl.Table(root, infoframe, object_list, person_list)# Создаем главное меню
+main_menu = mm.MainMenu(root, table, infoframe, person_list, object_list)
+
 
 # Запускаем отображение
 root.mainloop()

@@ -25,6 +25,12 @@ def reverse_key(key):
 
 
 if __name__ == '__main__':
-    print(crc('00550073D712'))
-    print(crc('00000018B613'))
-    print(crc('000000A434CB'))
+    print(crc('00000072BEA5'))
+    print(crc('0000001811A6'))
+    print(crc('000000945A3B'))
+    print(crc('000000A21DD7'))
+    print(crc('000000423526'))
+    print(crc('0000003D2BAB'))
+    print(crc('0000001D67EC'))
+    print(crc('0000007209E6'))
+    print(crc('00000023C599'))

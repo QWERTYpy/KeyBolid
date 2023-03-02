@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from person import Person
 import object
 from bolid_perm import Signal10, C2000_4
 # Всплывающее меню при создании или редактировании информации о объекте
@@ -16,12 +17,17 @@ class FramePerson(tk.Toplevel):
             if __.id == self.object:
                 self.object_cur = __
         for _ in self.person_list:
+            # print(type(_.key), type(self.key))
             if _.key == self.key:
                 self.person_cur = _
-
+        if not self.key:
+            self.person_list.append(Person())
+            self.person_cur = self.person_list[-1]
+            self.person_cur.permission[self.object_cur.id] = [self.object_cur.num, '000000', '000000']
 
         self.create_frame()
-        self.filling_person()
+        if self.key:
+            self.filling_person()
         if self.object_cur.type == '4':
             self.bolid_4(self.object_cur)
         if self.object_cur.type == '10':
