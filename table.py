@@ -2,6 +2,8 @@
 from tkinter import ttk
 import tkinter as tk
 import frame_person as fp
+import c20004
+import sig10
 
 
 class Table:
@@ -130,12 +132,39 @@ class Table:
         # Создаем кнопку для взаимодействия
         self.combobox_btn = ttk.Button(self.root, text='Выбрать', command=self.combobox_btn_press)
         self.combobox_btn.grid(row=0, column=2)
+        # Создаем кнопку для выгрузки
+        self.export_btn = ttk.Button(self.root, text='Выгрузить', command=self.export_btn_press)
+        self.export_btn.grid(row=0, column=3)
+        if self.object_main == "000":
+            self.export_btn['state'] = 'disabled'
+
+    def export_btn_press(self):
+
+        permission_list = []
+        for _ in self.person_list:
+            cur_perm = _.permission.get(self.object_main)
+            if cur_perm:
+                permission_list.append([_.key, cur_perm[2]])
+
+        for _ in self.object_list:
+            if self.object_main == _.id:
+                if _.type == '10':
+                    sig10.write_key(_.num, permission_list)
+                if _.type =='4':
+                    c20004.write_key(_.num, permission_list)
+
 
     def combobox_btn_press(self):
         if self.combobox_obj_var.get() == "Все":
             self.object_main = "000"
+            self.export_btn['state'] = 'disabled'
+            self.export_btn['text'] = "Выгрузить"
         else:
             self.object_main = self.object_dict[self.combobox_obj_var.get()]
+            self.export_btn['state'] = 'enabled'
+            for _ in self.object_list:
+                if self.object_main == _.id:
+                    self.export_btn['text'] = f"Выгрузить для {_.num}"
         self.search_table_action()
 
 
