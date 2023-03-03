@@ -1,8 +1,10 @@
 import binascii
 import crc8bolid
 
+
 def write_key(number, permition_list): # [[key, perm]] 000000AABBCC, AABB00
     """
+    Функция для записи файла ключей для С2000-4
     AA: 10 - Доступ
         08 - Ключ ХО
     BB: 1   2   3   4

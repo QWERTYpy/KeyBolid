@@ -4,6 +4,7 @@ import crc8bolid
 
 def write_key(number, permition_list): # [[key, perm]] 000000AABBCC AABBCC
     """
+    Функция для записи файла ключей для Сигнала - 10
     AA  1   2   3   4
     BB                  5   6   7   8
     CC                                  9   10

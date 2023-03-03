@@ -12,9 +12,10 @@ def on_closing():
 
 
 # Основные переменные
-object_list = sl.load_object_ini()
-person_list = sl.load_person_ini()
+object_list = sl.load_object_ini()  # Список объектов
+person_list = sl.load_person_ini()  # Список персон
 object_list_len = len(object_list)
+# Создаем приложение
 root = tk.Tk()
 root.protocol("WM_DELETE_WINDOW", on_closing)
 root.title(("KeyBolid - v.1.0"))
@@ -23,12 +24,9 @@ root.resizable(False, False)  # Запрещаем изменять размер
 root.configure(background='#ffffff')  # Устанавливаем цвет фона
 # Создаем инфополе
 infoframe = i_f.InfoFrame(root)
-
 # Создаем основную таблицу
 table = tbl.Table(root, infoframe, object_list, person_list)# Создаем главное меню
 main_menu = mm.MainMenu(root, table, infoframe, person_list, object_list)
-
-
 # Запускаем отображение
 root.mainloop()
 

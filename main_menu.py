@@ -4,22 +4,30 @@ import saveloadini as sl
 import crc8bolid as crc
 import frame_person as fp
 from tkinter import filedialog
-from  frame_object import FrameObject
+from frame_object import FrameObject
 from person import Person
 import binascii
 import re
 
 
-
 class MainMenu:
     def __init__(self, root, table, info_frame, person_list, object_list):
+        """
+        Инициализируем верхнее меню
+        :param root: Указатель на основное окно
+        :param table: Указатель на таблицу с даныными
+        :param info_frame: Указатель на информационное поле
+        :param person_list: Список Персон (Объектов класса Person)
+        :param object_list: Список Объектов ( Объектов класса Object)
+        """
         self.root = root
         self.table = table
         self.info_frame = info_frame
         self.person_list = person_list
         self.object_list = object_list
-        self.open_object = 0
+        self.open_object = 0  # Инициируем переменную содержащую номер импортируемого Объекта получаемого из названия файла
         self.main_menu = tk.Menu(self.root)
+        # Добавляем пункты меню
         self.main_menu.add_command(label="Сохранить", command=self.main_menu_save_object)
         self.main_menu.add_command(label="Загрузить", command=self.main_menu_load_object)
         self.main_menu.add_command(label="Добавить", command=self.main_menu_load_person)
@@ -27,121 +35,163 @@ class MainMenu:
         self.root.config(menu=self.main_menu)
 
     def main_menu_delete_person(self):
+        """
+        Для удаления выбранной персоны
+        :return:
+        """
+        # Если ничего не выбрано
         if self.table.object_main == '000':
-            self.info_frame.title_left_down_text.set("Выбирете Объект")
+            self.info_frame.title_left_down_text.set("Выберите Объект ...")
         else:
+            # Получаем ключ из выбранной строки
             select_person = str(self.table.main_table.item(self.table.main_table.selection())['values'][3])
             for _ in self.person_list:
+                # Выбираем Персону соответсвующую ключу
                 if _.key == select_person:
+                    # Удаляем из списка прав запись соответвующую выбранному Объекту
                     _.permission.pop(self.table.object_main)
+            # Обновляем записи в таблице
             self.table.search_table_action()
 
-
     def main_menu_load_person(self):
+        """
+        Добавление новой Персоны
+        :return:
+        """
+        # Если ничего не выбрано
         if self.table.object_main == '000':
-            self.info_frame.title_left_down_text.set("Выбирете Объект")
+            self.info_frame.title_left_down_text.set("Выберете Объект ...")
         else:
-
+            # Создаем дочернее окно для добавления новой Персоны и назначения ему прав для выбранного ОБъекта
             frame_person = fp.FramePerson(self.root, '', self.table.object_main, self.person_list, self.object_list)
-
-            # descr.geometry(f"200x180+{self.position_cursor_old_x + int(x) + 10}+{self.position_cursor_old_y + int(y)}")
             frame_person.geometry("400x400+50+50")
             frame_person.title('Редактирование доступа')
             frame_person.grab_set()
             frame_person.wait_window()
+            # Если данные изменены, то обновляем данные
             if frame_person.flag_change:
                 self.table.search_table_action()
 
     def main_menu_save_object(self):
+        """
+        Сохраняем данные в ini файлы
+        :return:
+        """
         sl.save_person_ini(self.person_list)
         sl.save_object_ini(self.object_list)
-        self.info_frame.title_left_down_text.set("Сохранено")
+        self.info_frame.title_left_down_text.set("Сохранено ...")
 
     def main_menu_load_object(self):
+        """
+        Импорт информации из файла ключей
+        :return:
+        """
         self.info_frame.title_left_down_text.set("Выберите файл")
-        self.flag_add = False
-        flag_key_add = False
-        filepath = filedialog.askopenfilename()
-        line_cursor = 0
-        buffer_str = b''
-        cursor_str = False
+        flag_object_add = False  # Флаг существования импортируемого Объекта в базе
+        flag_key_add = False  # Флаг существования импортируемого ключа в базе
+        # Открываем диалог выбора файла
+        filepath = filedialog.askopenfilename(filetypes=[('Файлы ключей', '*.ki')])
+        line_cursor = 0  # Указатель на количество обработанных строк
+        buffer_str = b''  # Буфер для хранения разбитых строк
+        flag_cursor_str = False  # Флаг указателя на строку с ключом и правами доступа
+        # Если выбран файл
         if filepath != "":
+            # Открываем файл для построчного чтения
             file = open(filepath, 'rb')
             for line in file:
+                # Обрабатываем первую строку
                 line_cursor += 1
                 if line_cursor == 1:
-                    math = re.search(r'Keys.*v.\d.\d\d', line.decode('ansi'))
-                    _, type_obj, ver = math[0].split(' ')
-                    # print(name,ver)
+                    # Выбираем из строки тип прибора и версию
+                    str_type_ver = re.search(r'Keys.*v.\d.\d\d', line.decode('ansi'))
+                    _, type_obj, ver = str_type_ver[0].split(' ')
+                    # Выбираем из имени файла номер прибора
                     self.open_object = re.search(r'\d{1,3}.ki', filepath)[0][:-3]
+                    # Проверяем существует ли добавляемый Объект в базе
                     for _ in self.object_list:
                         if self.open_object == _.num:
-                            self.info_frame.title_left_down_text.set("Объект уже присутствует в базе.")
-                            self.flag_add = True
+                            self.info_frame.title_left_down_text.set("Объект существует в базе...")
+                            flag_object_add = True  # Включаем флаг, что Объект существует
                             break
-                    if not self.flag_add:
-                        self.info_frame.title_left_down_text.set("Добавление Объекта.")
+                    # Если Объекта нет в базе, то добавляем
+                    if not flag_object_add:
+                        self.info_frame.title_left_down_text.set("Добавление Объекта...")
+                        # Создаем окно добавления описания к Объекту
                         frame_object = FrameObject(self.root, type_obj, ver, self.open_object, self.object_list)
                         frame_object.geometry("260x250+50+50")
                         frame_object.title('Добавление нового Объекта')
                         frame_object.grab_set()
                         frame_object.wait_window()
+                # Выводим информацию об обработанных строках
                 self.info_frame.title_left_down_text.set(f"Загрузка строк - {line_cursor}.")
-
+                # Строка длиной 48 предшествует строке с ключом и правами
                 if len(binascii.hexlify(line)) == 48:
-                    cursor_str = True
+                    # Если такая строка обнаружена включаем флаг и уходим на следующую итерацию
+                    flag_cursor_str = True
                     continue
-                if cursor_str:
+                # Если флаг включен начинаем разборс троки
+                if flag_cursor_str:
+                    # Добавляем строку в буфер, т.к. есть битые строки
+                    # Если из этой строки не будет получен ключ, то строка плюсуется со следующей
                     buffer_str += line
-
-                    if type_obj == "Signal-10" and len(binascii.hexlify(buffer_str)) == 304 or len(binascii.hexlify(buffer_str)) == 262:
-                        cursor_str = False
+                    # Если строка целая или последняя и тип Объекта Сигнал-10
+                    if type_obj == "Signal-10" and len(binascii.hexlify(buffer_str)) == 304 or len(
+                            binascii.hexlify(buffer_str)) == 262:
+                        # Выключаем флаг, т.к. строка найдена
+                        flag_cursor_str = False
+                        # Получаем ключ и права доступа
                         self.file_key = crc.reverse_key(binascii.hexlify(buffer_str)[242:254])
                         self.file_perm = binascii.hexlify(buffer_str)[256:262]
+                        # Обнуляем буфер
                         buffer_str = b''
+                        # Включаем флаг, что получен ключ
                         flag_key_add = True
-
-                    if type_obj == 'S2000-4' and len(binascii.hexlify(buffer_str)) == 346 or len(binascii.hexlify(buffer_str)) == 276:
-                        cursor_str = False
-
+                    # Если строка целая или последняя и тип Объекта С2000-4
+                    if type_obj == 'S2000-4' and len(binascii.hexlify(buffer_str)) == 346 or len(
+                            binascii.hexlify(buffer_str)) == 276:
+                        # Выключаем флаг т.к. строка найдена
+                        flag_cursor_str = False
+                        # Получаем ключ и права доступа
                         self.file_key = crc.reverse_key(binascii.hexlify(buffer_str)[214:226])
                         self.file_perm = binascii.hexlify(buffer_str)[228:234]
+                        # Обнкляем буфер
                         buffer_str = b''
+                        # Включаем флаг, что получен ключ
                         flag_key_add = True
-
-                # if line_cursor in list(range(4, 2000, 3)):
-                #     # print(len(binascii.hexlify(line)), binascii.hexlify(line))
-                #     if type_obj == "Signal-10":
-                #         self.file_key = crc.reverse_key(binascii.hexlify(line)[242:254])
-                #         self.file_perm = binascii.hexlify(line)[256:262]
-                #     if type_obj == 'S2000-4':
-                #         self.file_key = crc.reverse_key(binascii.hexlify(line)[214:226])
-                #         self.file_perm =binascii.hexlify(line)[228:234]
+                # Если ключ полючен
                 if flag_key_add:
-                    # flag_key_add = False
+                    # Переводим из byte в строку
                     self.file_key = self.file_key.decode('ansi')
                     self.file_perm = self.file_perm.decode('ansi')
                     for _ in self.person_list:
+                        # Если такой ключ уже существует в базе
                         if _.key == self.file_key:
-                            self.info_frame.title_left_down_text.set("Такой ключ существует")
+                            self.info_frame.title_left_down_text.set("Такой ключ существует...")
+                            # Если добавляется новый ОБъект
                             if frame_object.new_object:
-                               _.permission[frame_object.new_object.id] = [frame_object.new_object.num,
-                                                                                     '000000', self.file_perm]
+                                # В словарь добаляется необъодимая запись
+                                _.permission[frame_object.new_object.id] = [frame_object.new_object.num,
+                                                                            '000000', self.file_perm]
+                            # Выключаем флаг добавления
                             flag_key_add = False
                             continue
+                    # Если ключ еще не добавлен
                     if flag_key_add:
-                        self.info_frame.title_left_down_text.set("Добавление ключа")
+                        self.info_frame.title_left_down_text.set("Добавление ключа...")
                         new_person = Person()
                         new_person.name = ''  # Имя
                         new_person.surname = ''  # Фамилия
                         new_person.patronymic = ''  # Отчество
                         new_person.key = self.file_key  # Ключ
+                        # Если добавляется новый Объект
                         if frame_object.new_object:
-                            new_person.permission[frame_object.new_object.id] = [frame_object.new_object.num, '000000', self.file_perm]  # Права доступа # id: [Номер прибора, ХО, Доступ]
+                            new_person.permission[frame_object.new_object.id] = [frame_object.new_object.num, '000000',
+                                                                                 self.file_perm]
+                        # В список добавляется новая Персона
                         self.person_list.append(new_person)
+                        # Флаг добавления нового ключа выключается
                         flag_key_add = False
-            # self.table.search_table_action()
+            # Обновляются данные в таблице
             self.table.reboot_table()
-
-
+            # Закрывается файл ключей
             file.close()
