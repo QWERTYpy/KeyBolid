@@ -23,7 +23,19 @@ class MainMenu:
         self.main_menu.add_command(label="Сохранить", command=self.main_menu_save_object)
         self.main_menu.add_command(label="Загрузить", command=self.main_menu_load_object)
         self.main_menu.add_command(label="Добавить", command=self.main_menu_load_person)
+        self.main_menu.add_command(label="Удалить", command=self.main_menu_delete_person)
         self.root.config(menu=self.main_menu)
+
+    def main_menu_delete_person(self):
+        if self.table.object_main == '000':
+            self.info_frame.title_left_down_text.set("Выбирете Объект")
+        else:
+            select_person = str(self.table.main_table.item(self.table.main_table.selection())['values'][3])
+            for _ in self.person_list:
+                if _.key == select_person:
+                    _.permission.pop(self.table.object_main)
+            self.table.search_table_action()
+
 
     def main_menu_load_person(self):
         if self.table.object_main == '000':
