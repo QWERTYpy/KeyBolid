@@ -3,11 +3,11 @@ import tkinter as tk
 
 
 class Person:
-    def __init__(self):
-        self.name = ''  # Имя
-        self.surname = ''  # Фамилия
-        self.patronymic = ''  # Отчество
-        self.key = ''  # Ключ
+    def __init__(self, name='', surname='', patronymic='', key=''):
+        self.name = name  # Имя
+        self.surname = surname  # Фамилия
+        self.patronymic = patronymic  # Отчество
+        self.key = key  # Ключ
         self.permission = {}  # Права доступа # id_object: [Номер прибора, ХО, Доступ]
 
     def show(self):

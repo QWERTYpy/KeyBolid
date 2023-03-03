@@ -4,7 +4,7 @@ import crc8bolid as crc
 
 
 line_cursor = 0
-file = open('71_2.ki', 'rb')
+file = open('exp_key/71.ki', 'rb')
 # file = open('53.ki', 'rb')
 # for line in file:
 #     # print(line)
@@ -15,7 +15,7 @@ count_key = 0
 buffer_str = b''
 for line in file:
     line_cursor += 1
-    # print(line_cursor,'->',len(binascii.hexlify(line)), binascii.hexlify(line))
+    print(line_cursor,'->',len(binascii.hexlify(line)), binascii.hexlify(line))
     if len(binascii.hexlify(line)) == 48:
         cursor_str = True
         continue
@@ -40,7 +40,7 @@ for line in file:
             file_perm =binascii.hexlify(buffer_str)[228:234]
             buffer_str = b''
 
-            print(count_key, file_key, file_perm)
+            # print(count_key, file_key, file_perm)
 
 
 

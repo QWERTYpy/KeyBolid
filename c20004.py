@@ -20,7 +20,7 @@ def write_key(number, permition_list): # [[key, perm]] 000000AABBCC, AABB00
     b_pre_end = b'ff0fffff0fff000000000000000000000000000101'
     b_end = b'00005d4f80775cf819002000000018f91900904e807780f81900101d9501000000000a'
     # Открывает файл для сохранения ключей
-    file_new = open(f'{number}.ki', 'wb')
+    file_new = open(f'exp_key/{number}.ki', 'wb')
     len_pass = len(permition_list)
     # Если ключей меньше 16, то берем последний символ и дибиваем его 0
     if len_pass < 16:
@@ -35,6 +35,7 @@ def write_key(number, permition_list): # [[key, perm]] 000000AABBCC, AABB00
     for _perm_ind in range(len(permition_list)):
         file_new.write(binascii.unhexlify(b_body))
         b_key_perm = crc8bolid.reverse_key(crc8bolid.crc(permition_list[_perm_ind][0]))+bytes(permition_list[_perm_ind][1],'ascii')
+        # print(b_key_perm)
         file_new.write(binascii.unhexlify(b_key_perm))
         file_new.write(binascii.unhexlify(b_pre_end))
         # Если ключ не последний, то добиваем строку концовкой

@@ -165,28 +165,30 @@ class MainMenu:
                     self.file_perm = self.file_perm.decode('ansi')
                     for _ in self.person_list:
                         # Если такой ключ уже существует в базе
-                        if _.key == self.file_key:
+                        if _.key.upper() == self.file_key.upper():
                             self.info_frame.title_left_down_text.set("Такой ключ существует...")
-                            # Если добавляется новый ОБъект
+                            # Если добавляется новый Объект
                             if frame_object.new_object:
-                                # В словарь добаляется необъодимая запись
-                                _.permission[frame_object.new_object.id] = [frame_object.new_object.num,
-                                                                            '000000', self.file_perm]
+                                # В словарь добаляется необходимая запись
+                                if _.permission.get(frame_object.new_object.id):
+                                    if _.permission[frame_object.new_object.id][2] == self.file_perm.upper():
+                                        print(f"Полный дубликат для прибора {self.open_object} ключ: {self.file_key.upper()}")
+                                    else:
+                                        print('!!!! Расхождение прав доступа !!!! >>>> {self.open_object} ключ: {self.file_key}')
+                                else:
+                                    _.permission[frame_object.new_object.id] = [frame_object.new_object.num,
+                                                                                '000000', self.file_perm.upper()]
                             # Выключаем флаг добавления
                             flag_key_add = False
                             continue
                     # Если ключ еще не добавлен
                     if flag_key_add:
                         self.info_frame.title_left_down_text.set("Добавление ключа...")
-                        new_person = Person()
-                        new_person.name = ''  # Имя
-                        new_person.surname = ''  # Фамилия
-                        new_person.patronymic = ''  # Отчество
-                        new_person.key = self.file_key  # Ключ
+                        new_person = Person(key=self.file_key.upper())
                         # Если добавляется новый Объект
                         if frame_object.new_object:
                             new_person.permission[frame_object.new_object.id] = [frame_object.new_object.num, '000000',
-                                                                                 self.file_perm]
+                                                                                 self.file_perm.upper()]
                         # В список добавляется новая Персона
                         self.person_list.append(new_person)
                         # Флаг добавления нового ключа выключается
