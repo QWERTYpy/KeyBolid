@@ -1,5 +1,6 @@
 import binascii
 import crc8bolid
+import time
 
 
 def write_key(number, permition_list): # [[key, perm]] 000000AABBCC AABBCC
@@ -19,7 +20,7 @@ def write_key(number, permition_list): # [[key, perm]] 000000AABBCC AABBCC
     # Концовка
     b_end = b'00f91900904e047780f81900403f9901000000000a'
     # Открывает файл для сохранения ключей
-    file_new = open(f'exp_key/{number}.ki', 'wb')
+    file_new = open(f'exp_key/{number}_{time.strftime("%d%m%y_%H_%M", time.localtime())}.ki', 'wb')
     len_pass = len(permition_list)
     # Если ключей меньше 16, то берем последний символ и дибиваем его 0
     if len_pass < 16:
