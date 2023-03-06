@@ -111,10 +111,16 @@ class FramePerson(tk.Toplevel):
 
     def click_btn_save(self):
         flag_dubl = False
+        edit_cur = False
         for _ in self.person_list:
             if _.key.upper() == self.entry_hex.get():
                 print(f'Обнаружен дубликат ключа: {_.key.upper()}')
                 flag_dubl = True
+        for _ in self.object_list:
+            if _.id == self.object_cur.id:
+                print(f'Изменения в текущем Объекте: {_.id} - {_.num}')
+                edit_cur = True
+                flag_dubl = False
 
         if not flag_dubl:
             self.flag_change = True
@@ -127,6 +133,7 @@ class FramePerson(tk.Toplevel):
                 self.person_cur.permission[self.object_cur.id][2] = self.person_cur.convert_check_10(self.object_signl10.get_checkbox())
             if self.object_cur.type == '4':
                 self.person_cur.permission[self.object_cur.id][2] = self.person_cur.convert_check_4(self.object_c2000_4.get_checkbox(),self.object_c2000_4.get_perm())
-            self.person_list.append(self.person_cur)
+            if not edit_cur:
+                self.person_list.append(self.person_cur)
             # self.person_cur = self.person_list[-1]
             # self.person_cur.permission[self.object_cur.id] = [self.object_cur.num, '000000', '000000']
