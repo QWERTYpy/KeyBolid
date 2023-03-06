@@ -22,7 +22,7 @@ def load_person_ini():
         for _ in config[hex_key]['permission'].split(';'):
             if _:
                 id_obj, num_obj, xo_obj, perm_obj = map(str.strip, _.split(','))
-                pers.permission[id_obj] = [num_obj, xo_obj, perm_obj]
+                pers.permission[id_obj] = [num_obj, xo_obj, perm_obj.upper()]
         list_person.append(pers)
     return list_person
 
@@ -33,7 +33,7 @@ def save_person_ini(list_person):
     for _ in list_person:
         str_permission = ''
         for _perm in _.permission:
-            str_permission += f"{_perm}, {_.permission[_perm][0]}, {_.permission[_perm][1]}, {_.permission[_perm][2]};"
+            str_permission += f"{_perm}, {_.permission[_perm][0]}, {_.permission[_perm][1]}, {_.permission[_perm][2].upper()};"
         config[f"{_.key.upper()}"] = {'name': _.name,
                               'surname': _.surname,
                               'patronymic': _.patronymic,

@@ -10,6 +10,12 @@ class Person:
         self.key = key  # Ключ
         self.permission = {}  # Права доступа # id_object: [Номер прибора, ХО, Доступ]
 
+    def get_perm_obj(self):
+        _list_obj = []
+        for _ in self.permission.keys():
+            _list_obj.append(self.permission[_][0])
+        return (',').join(_list_obj)
+
     def show(self):
         print(self.name, self.surname, self.patronymic, self.key, self.permission)
 
