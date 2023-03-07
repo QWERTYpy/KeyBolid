@@ -40,7 +40,6 @@ class FramePerson(tk.Toplevel):
         self.flag_change = False
         self.btn_save = ttk.Button(self, text='Сохранить', command=self.click_btn_save)
         self.btn_save.place(x=300, y=340)
-        # self.btn_save.grid(row=10, column=10)
 
     def filling_person(self):
         self.entry_name.insert(0, self.person_cur.name)
@@ -73,49 +72,48 @@ class FramePerson(tk.Toplevel):
         self.obj_text.insert(1.0, obj.comment)
         self.obj_text.configure(state=tk.DISABLED)
 
-        # checkbox_list.append(tk.IntVar())
-        # checkbox_list[i].set(1)
-
-        # ttk.Label(self, text="Шлейф").place
-        # for _ in range(10):
-        #     ttk.Label(self, text=f"{_+1}",width=4, background='white').grid(row=5, column=f"{3+_}")
-
     def create_frame(self):
         self.label_surname = ttk.Label(self, text="Фамилия:")
         self.label_surname.place(x=0, y=0)
-        # self.label_surname.grid(row=0, column=0, columnspan=5, sticky='w')
         self.entry_surname = ttk.Entry(self)
         self.entry_surname.place(x=100, y=0)
 
         self.label_name = ttk.Label(self, text="Имя:")
-        # self.label_name.grid(row=1, column=0, columnspan=5, sticky='w')
         self.label_name.place(x=0, y=20)
         self.entry_name = ttk.Entry(self)
         self.entry_name.place(x=100, y=20)
-        # self.entry_name.grid(row=1, column=5)
-        # # self.entry_name.insert(0,"333")
-        #
+
         self.label_patr = ttk.Label(self, text="Отчество:")
         self.label_patr.place(x=0, y=40)
-        # self.label_patr.grid(row=2, column=0, columnspan=5,sticky='w')
         self.entry_patr = ttk.Entry(self)
         self.entry_patr.place(x=100, y=40)
-        # self.entry_patr.grid(row=2, column=5, columnspan=5)
         #
         self.label_hex = ttk.Label(self, text="Ключ:")
         self.label_hex.place(x=0, y=60)
-        # self.label_hex.grid(row=3, column=0, columnspan=5, sticky='w')
         self.entry_hex = ttk.Entry(self)
         self.entry_hex.place(x=100, y=60)
-        # self.entry_hex.grid(row=3, column=5, columnspan=5)
+
+        self.search_btn = ttk.Button(self, text='Искать', command=self.click_btn_search)
+        self.search_btn.place(x=250, y=60)
+
+
+    def click_btn_search(self):
+
+        for _ in self.person_list:
+            if _.key.upper() == self.entry_hex.get().upper():
+                self.entry_name.insert(0, _.name)
+                self.entry_surname.insert(0, _.surname)
+                self.entry_patr.insert(0, _.patronymic)
 
     def click_btn_save(self):
-        # flag_dubl = False
+        flag_dubl_key = False
         # # edit_cur = False
         for _ in self.person_list:
-            if _.key.upper() == self.entry_hex.get():
+            if _.key.upper() == self.entry_hex.get().upper():
                 print(f'Обнаружен дубликат ключа: {_.key.upper()}')
-                # flag_dubl = True
+                flag_dubl_key = True
+                self.person_cur = _
+                self.person_cur.permission[self.object_cur.id] = [self.object_cur.num, '000000', '000000']
         # for _ in self.object_list:
         #     if _.id == self.object_cur.id:
         #         print(f'Изменения в текущем Объекте: {_.id} - {_.num}')
@@ -127,14 +125,14 @@ class FramePerson(tk.Toplevel):
         self.person_cur.name = self.entry_name.get()
         self.person_cur.surname = self.entry_surname.get()
         self.person_cur.patronymic = self.entry_patr.get()
-        self.person_cur.key = self.entry_hex.get()
+        self.person_cur.key = self.entry_hex.get().upper()
         if self.object_cur.type == '10':
             self.person_cur.permission[self.object_cur.id][2] = self.person_cur.convert_check_10(
                 self.object_signl10.get_checkbox())
         if self.object_cur.type == '4':
             self.person_cur.permission[self.object_cur.id][2] = self.person_cur.convert_check_4(
                 self.object_c2000_4.get_checkbox(), self.object_c2000_4.get_perm())
-        if self.flag_add_new:
+        if self.flag_add_new and not flag_dubl_key:
             self.person_list.append(self.person_cur)
             # self.person_cur = self.person_list[-1]
             # self.person_cur.permission[self.object_cur.id] = [self.object_cur.num, '000000', '000000']
