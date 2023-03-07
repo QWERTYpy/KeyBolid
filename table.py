@@ -47,6 +47,7 @@ class Table:
         self.people_table = [(_.surname, _.name, _.patronymic, _.key, _.get_perm_obj()) for _ in self.person_list]
         for person in self.people_table:
             self.main_table.insert("", tk.END, values=person)
+        self.info_frame.title_left_down_text.set(f"Найдено {len(self.people_table)} записей")
         # Определяем действие двойного щелчка по полю
         self.main_table.bind("<Double-Button-1>", self.left_button_double)
 
@@ -86,6 +87,7 @@ class Table:
         self.people_table = [(_.surname, _.name, _.patronymic, _.key, _.get_perm_obj()) for _ in self.person_list]
         for person in self.people_table:
             self.main_table.insert("", tk.END, values=person)
+        self.info_frame.title_left_down_text.set(f"Найдено {len(self.people_table)} записей")
 
     def search_table_action(self):
         """
@@ -109,6 +111,8 @@ class Table:
         # Выводим данные в таблицу
         for person in self.people_table:
             self.main_table.insert("", tk.END, values=person)
+        self.info_frame.title_left_down_text.set(f"Найдено {len(self.people_table)} записей")
+
 
     def search_table(self):
         """
@@ -117,11 +121,11 @@ class Table:
         """
         self.entry_name = ttk.Entry(self.root)
         self.entry_name.config(width=23)
-        self.entry_name.place(x=10, y=40)
+        self.entry_name.place(x=160, y=40)
 
         self.entry_surname = ttk.Entry(self.root)
         self.entry_surname.config(width=23)
-        self.entry_surname.place(x=160, y=40)
+        self.entry_surname.place(x=10, y=40)
 
         self.entry_patronymic = ttk.Entry(self.root)
         self.entry_patronymic.config(width=23)

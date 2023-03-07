@@ -86,7 +86,7 @@ for path in pathlist:
         #     print(fio)
 ini_person_list = saveloadini.load_person_ini()
 for _ in ini_person_list:
-    if _.key[6:] in person_dict.keys():
+    if _.key in person_dict.keys():
         _.name = person_dict[_.key][1]
         _.surname = person_dict[_.key][0]
         _.patronymic = person_dict[_.key][2]

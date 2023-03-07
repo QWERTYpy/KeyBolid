@@ -15,7 +15,7 @@ def crc(byte_str):
     # Высчитываем контрольную сумму
     a = hex(crc8(binascii.unhexlify(byte_str_reverse)))
     if len(a) < 4:
-        return bytes(a[2:].upper() + '0' + byte_str.upper() + '01', 'ascii')
+        return bytes('0' + a[2:].upper() + byte_str.upper() + '01', 'ascii')
     return bytes(a[2:].upper() + byte_str.upper() + '01', 'ascii')
 
 
