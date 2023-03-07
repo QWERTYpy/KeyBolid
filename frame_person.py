@@ -3,6 +3,7 @@ from tkinter import ttk
 from person import Person
 import object
 from bolid_perm import Signal10, C2000_4
+import re
 
 
 # Всплывающее меню при создании или редактировании информации о объекте
@@ -90,11 +91,15 @@ class FramePerson(tk.Toplevel):
         #
         self.label_hex = ttk.Label(self, text="Ключ:")
         self.label_hex.place(x=0, y=60)
-        self.entry_hex = ttk.Entry(self)
+        check = (self.register(self.is_valid), "%P")
+        self.entry_hex = ttk.Entry(self, validate="key", validatecommand=check)
         self.entry_hex.place(x=100, y=60)
 
         self.search_btn = ttk.Button(self, text='Искать', command=self.click_btn_search)
         self.search_btn.place(x=250, y=60)
+
+    def is_valid(self,newval):
+        return re.match("^[0-9ABCDEF]{0,12}$", newval) is not None
 
 
     def click_btn_search(self):
