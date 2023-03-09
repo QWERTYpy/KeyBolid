@@ -194,7 +194,7 @@ class MainMenu:
                                         else:
                                             print('!!!! Расхождение прав доступа !!!! >>>> {self.open_object} ключ: {self.file_key}')
                                     else:
-                                        _.permission[frame_object.new_object.id] = [frame_object.new_object.num,
+                                        _.permission[self.old_object.id] = [self.old_object.num,
                                                                                     '000000', self.file_perm.upper()]
                             # Выключаем флаг добавления
                             flag_key_add = False
