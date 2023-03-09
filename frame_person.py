@@ -100,7 +100,7 @@ class FramePerson(tk.Toplevel):
         self.search_btn.place(x=250, y=60)
 
     def is_valid(self,newval):
-        return re.match("^[0-9ABCDEF]{0,12}$", newval) is not None
+        return re.match("^[0-9ABCDEFabcdef]{0,12}$", newval) is not None
 
 
     def click_btn_search(self):
