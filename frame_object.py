@@ -1,8 +1,11 @@
 import tkinter as tk
 from tkinter import ttk
 from object import ObjectBolid
+import saveloadini as sl
 import object
 from bolid_perm import Signal10, C2000_4
+
+
 # Всплывающее меню при создании или редактировании информации о объекте
 class FrameObject(tk.Toplevel):
     def __init__(self, parent, type_object, ver, open_object, object_list):
@@ -45,14 +48,12 @@ class FrameObject(tk.Toplevel):
         self.btn_save = ttk.Button(self, text='Сохранить', command=self.click_btn_save)
         self.btn_save.place(x=150, y=200)
 
-
-
     def click_btn_save(self):
         self.flag_change = True
         index_object = []
         for _ in self.object_list:
             index_object.append(_.id)
-        index_list = ['{:03}'.format(_) for _ in range(1,999)]
+        index_list = ['{:03}'.format(_) for _ in range(1, 999)]
         for _ in index_list:
             if _ in index_object:
                 continue
@@ -68,7 +69,8 @@ class FrameObject(tk.Toplevel):
                 obj.interface = 0
             obj.ver = self.ver
 
-            obj.comment = self.obj_text.get("1.0",tk.END)
+            obj.comment = self.obj_text.get("1.0", tk.END)
             self.new_object = obj
             self.object_list.append(obj)
+            sl.save_log(f"{obj.id} {obj.num} - {obj.name}", f"Добавление Объекта")
             break

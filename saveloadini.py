@@ -2,6 +2,14 @@ import configparser
 from person import Person
 from object import ObjectBolid
 import os
+import time
+
+def save_log(edit_data, mess):
+    # Файл для сохранения изменений
+    path = 'log_bd.txt'
+    file = open(path,'a')
+    file.write(f'{time.strftime("%d%m%y_%H_%M", time.localtime())} - > {mess} : {edit_data}\n')
+    file.close()
 
 def load_person_ini():
     # Загружаем объекты из файла

@@ -4,6 +4,7 @@ from person import Person
 import object
 from bolid_perm import Signal10, C2000_4
 import re
+import saveloadini as sl
 
 
 # Всплывающее меню при создании или редактировании информации о объекте
@@ -141,3 +142,4 @@ class FramePerson(tk.Toplevel):
             self.person_list.append(self.person_cur)
             # self.person_cur = self.person_list[-1]
             # self.person_cur.permission[self.object_cur.id] = [self.object_cur.num, '000000', '000000']
+        sl.save_log(f"{self.person_cur.surname} {self.person_cur.name} {self.person_cur.key} - {self.object}", f"Добавление Персоны")
