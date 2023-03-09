@@ -25,6 +25,7 @@ class MainMenu:
         self.info_frame = info_frame
         self.person_list = person_list
         self.object_list = object_list
+        self.flag_change = False # Флаг для отслеживания изменений
         self.open_object = 0  # Инициируем переменную содержащую номер импортируемого Объекта получаемого из названия файла
         self.main_menu = tk.Menu(self.root)
         self.old_object = None # При импорте уже существующего Объекта
@@ -64,20 +65,23 @@ class MainMenu:
             self.info_frame.title_left_down_text.set("Выберете Объект ...")
         else:
             # Создаем дочернее окно для добавления новой Персоны и назначения ему прав для выбранного ОБъекта
-            frame_person = fp.FramePerson(self.root, '', self.table.object_main, self.person_list, self.object_list)
-            frame_person.geometry("400x400+50+50")
-            frame_person.title('Редактирование доступа')
-            frame_person.grab_set()
-            frame_person.wait_window()
+            self.frame_person = fp.FramePerson(self.root, '', self.table.object_main, self.person_list, self.object_list)
+            self.frame_person.geometry("400x400+50+50")
+            self.frame_person.title('Редактирование доступа')
+            self.frame_person.grab_set()
+            self.frame_person.wait_window()
             # Если данные изменены, то обновляем данные
-            if frame_person.flag_change:
+            if self.frame_person.flag_change:
                 self.table.search_table_action()
+            self.flag_change = self.flag_change or self.frame_person.flag_change
 
     def main_menu_save_object(self):
         """
         Сохраняем данные в ini файлы
         :return:
         """
+        self.flag_change = False
+        self.table.flag_change = False
         sl.save_person_ini(self.person_list)
         sl.save_object_ini(self.object_list)
         self.info_frame.title_left_down_text.set("Сохранено ...")

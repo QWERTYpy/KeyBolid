@@ -8,6 +8,7 @@ import sig10
 
 class Table:
     def __init__(self, root, info_frame, object_list, person_list):
+        self.flag_change = False
         self.root = root  # Указатель на основное окно
         self.object_list = object_list  # Список Объектов
         self.person_list = person_list  # Список Персон
@@ -56,18 +57,19 @@ class Table:
         if self.object_main == '000':
             return False
         # Если выбран Объект открываем дочернее окно
-        frame_person = fp.FramePerson(self.root, str(self.main_table.item(self.main_table.selection())['values'][3]),
+        self.frame_person = fp.FramePerson(self.root, str(self.main_table.item(self.main_table.selection())['values'][3]),
                                       self.object_main,
                                       self.person_list,
                                       self.object_list)
 
-        frame_person.geometry("400x400+50+50")
-        frame_person.title('Редактирование доступа')
-        frame_person.grab_set()
-        frame_person.wait_window()
+        self.frame_person.geometry("400x400+50+50")
+        self.frame_person.title('Редактирование доступа')
+        self.frame_person.grab_set()
+        self.frame_person.wait_window()
         # Обновляем вывод в таблице
-        if frame_person.flag_change:
+        if self.frame_person.flag_change:
             self.search_table_action()
+        self.flag_change = self.flag_change or self.frame_person.flag_change
 
     def reboot_table(self):
         """
