@@ -214,14 +214,21 @@ class MainMenu:
                             if frame_object.new_object:
                                 new_person.permission[frame_object.new_object.id] = [frame_object.new_object.num, '000000',
                                                                                      self.file_perm.upper()]
+                                sl.save_log(
+                                    f"{new_person.surname} {new_person.name} {new_person.key} - {frame_object.new_object.id}",
+                                    f"Импорт Персоны")
                         else:
                             if self.old_object:
                                 new_person.permission[self.old_object.id] = [self.old_object.num,
                                                                                      '000000',
                                                                                      self.file_perm.upper()]
+                                sl.save_log(
+                                    f"{new_person.surname} {new_person.name} {new_person.key} - {self.old_object.id}",
+                                    f"Импорт Персоны")
 
                         # В список добавляется новая Персона
                         self.person_list.append(new_person)
+
                         # Флаг добавления нового ключа выключается
                         flag_key_add = False
             # Обновляются данные в таблице
