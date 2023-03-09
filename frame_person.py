@@ -128,6 +128,7 @@ class FramePerson(tk.Toplevel):
 
         # if not self.flag_add_new:
         self.flag_change = True
+        # Считываем новые данные
         self.person_cur.name = self.entry_name.get()
         self.person_cur.surname = self.entry_surname.get()
         self.person_cur.patronymic = self.entry_patr.get()
@@ -140,6 +141,5 @@ class FramePerson(tk.Toplevel):
                 self.object_c2000_4.get_checkbox(), self.object_c2000_4.get_perm())
         if self.flag_add_new and not flag_dubl_key:
             self.person_list.append(self.person_cur)
-            # self.person_cur = self.person_list[-1]
-            # self.person_cur.permission[self.object_cur.id] = [self.object_cur.num, '000000', '000000']
+        # Добавляем запись в лог
         sl.save_log(f"{self.person_cur.surname} {self.person_cur.name} {self.person_cur.key} - {self.object}", f"Добавление Персоны")

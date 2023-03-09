@@ -70,7 +70,7 @@ class MainMenu:
         if self.table.object_main == '000':
             self.info_frame.title_left_down_text.set("Выберете Объект ...")
         else:
-            # Создаем дочернее окно для добавления новой Персоны и назначения ему прав для выбранного ОБъекта
+            # Создаем дочернее окно для добавления новой Персоны и назначения ему прав для выбранного Объекта
             self.frame_person = fp.FramePerson(self.root, '', self.table.object_main, self.person_list, self.object_list)
             self.frame_person.geometry("400x400+50+50")
             self.frame_person.title('Редактирование доступа')
@@ -215,7 +215,7 @@ class MainMenu:
                                 new_person.permission[frame_object.new_object.id] = [frame_object.new_object.num, '000000',
                                                                                      self.file_perm.upper()]
                                 sl.save_log(
-                                    f"{new_person.surname} {new_person.name} {new_person.key} - {frame_object.new_object.id}",
+                                    f"{new_person.surname} {new_person.name} {new_person.key} - {frame_object.new_object.id} {frame_object.new_object.num} {frame_object.new_object.name} ",
                                     f"Импорт Персоны")
                         else:
                             if self.old_object:
@@ -223,7 +223,7 @@ class MainMenu:
                                                                                      '000000',
                                                                                      self.file_perm.upper()]
                                 sl.save_log(
-                                    f"{new_person.surname} {new_person.name} {new_person.key} - {self.old_object.id}",
+                                    f"{new_person.surname} {new_person.name} {new_person.key} - {self.old_object.id} {self.old_object.num} {self.old_object.name}",
                                     f"Импорт Персоны")
 
                         # В список добавляется новая Персона

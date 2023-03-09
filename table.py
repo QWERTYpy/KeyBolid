@@ -57,10 +57,11 @@ class Table:
         if self.object_main == '000':
             return False
         # Если выбран Объект открываем дочернее окно
-        self.frame_person = fp.FramePerson(self.root, str(self.main_table.item(self.main_table.selection())['values'][3]),
-                                      self.object_main,
-                                      self.person_list,
-                                      self.object_list)
+        self.frame_person = fp.FramePerson(self.root,
+                                           str(self.main_table.item(self.main_table.selection())['values'][3]),
+                                           self.object_main,
+                                           self.person_list,
+                                           self.object_list)
 
         self.frame_person.geometry("400x400+50+50")
         self.frame_person.title('Редактирование доступа')
@@ -69,6 +70,7 @@ class Table:
         # Обновляем вывод в таблице
         if self.frame_person.flag_change:
             self.search_table_action()
+        # Устанавливаем флаг изменений
         self.flag_change = self.flag_change or self.frame_person.flag_change
 
     def reboot_table(self):
@@ -114,7 +116,6 @@ class Table:
         for person in self.people_table:
             self.main_table.insert("", tk.END, values=person)
         self.info_frame.title_left_down_text.set(f"Найдено {len(self.people_table)} записей")
-
 
     def search_table(self):
         """
