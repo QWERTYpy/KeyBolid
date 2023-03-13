@@ -10,6 +10,7 @@ from person import Person
 import binascii
 import re
 from postgres import PostgessBase
+from tkinter import messagebox as mb
 
 
 class MainMenu:
@@ -82,6 +83,24 @@ class MainMenu:
         # Если ничего не выбрано
         if self.table.object_main == '000':
             self.info_frame.title_left_down_text.set("Выберите Объект ...")
+            # -------
+            # Получаем ключ из выбранной строки
+            select_person = str(self.table.main_table.item(self.table.main_table.selection())['values'][3])
+            for _ in self.person_list:
+                # Выбираем Персону соответсвующую ключу
+                if _.key == select_person:
+                    # Удаляем из списка прав запись соответсвующую выбранному Объекту
+                    answer = mb.askyesno(
+                        title="Удаление записи",
+                        message="Удалить все записи по выбранному человеку?")
+                    if answer:
+                        sl.save_log(f"{_.surname} {_.name} {_.key} - {self.table.object_main}", f"Удаление Персоны")
+                        self.person_list.remove(_)
+                        break
+
+            # Обновляем записи в таблице
+            self.table.search_table_action()
+            # -----
         else:
             # Получаем ключ из выбранной строки
             select_person = str(self.table.main_table.item(self.table.main_table.selection())['values'][3])
