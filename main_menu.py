@@ -1,4 +1,5 @@
 # Верхнее меню
+import time
 import tkinter as tk
 import saveloadini as sl
 import crc8bolid as crc
@@ -8,6 +9,7 @@ from frame_object import FrameObject
 from person import Person
 import binascii
 import re
+from postgres import PostgessBase
 
 
 class MainMenu:
@@ -25,16 +27,52 @@ class MainMenu:
         self.info_frame = info_frame
         self.person_list = person_list
         self.object_list = object_list
-        self.flag_change = False # Флаг для отслеживания изменений
+        self.flag_change = False  # Флаг для отслеживания изменений
         self.open_object = 0  # Инициируем переменную содержащую номер импортируемого Объекта получаемого из названия файла
         self.main_menu = tk.Menu(self.root)
-        self.old_object = None # При импорте уже существующего Объекта
+        self.old_object = None  # При импорте уже существующего Объекта
+        self.person_list_bd = []
         # Добавляем пункты меню
         self.main_menu.add_command(label="Сохранить", command=self.main_menu_save_object)
         self.main_menu.add_command(label="Загрузить", command=self.main_menu_load_object)
         self.main_menu.add_command(label="Добавить", command=self.main_menu_load_person)
         self.main_menu.add_command(label="Удалить", command=self.main_menu_delete_person)
+        self.main_menu.add_command(label="Удалить возвращенные", command=self.main_menu_delete_return)
         self.root.config(menu=self.main_menu)
+
+    def main_menu_delete_return(self):
+        # Удаление возвращенных пропусков
+        if self.table.object_main == '000':
+            self.info_frame.title_left_down_text.set("Выберите Объект ...")
+        else:
+            self.info_frame.title_left_down_text.set("Формируется запрос ...")
+            time.sleep(0.1)
+            if not len(self.person_list_bd):
+                person_bd = PostgessBase()
+                self.person_list_bd = person_bd.search_fio('', '', '')
+            self.info_frame.title_left_down_text.set(f"Получено {len(self.person_list_bd)} - записей")
+            # Получаем список ключей существующих в БД
+            key_list = [_[4] for _ in self.person_list_bd]
+            # Пробегаем весь список персон соответсвующих выбранному Объекту
+            count_del = 0
+            for _ in self.table.people_table:
+                # Если ключа нет в БД, то удаляем его
+                if _[3] not in key_list:
+                    count_del += 1
+                    # Находим указатель на интересующую персону
+                    for __ in self.person_list:
+                        if __.key == _[3]:
+                            sl.save_log(f"{_[0]} {_[1]} {_[2]} - {self.table.object_main}", f"Удаление Персоны")
+                            __.permission.pop(self.table.object_main)
+
+                            if len(__.permission) == 0:
+                                self.person_list.remove(__)
+                                break
+                        # Обновляем записи в таблице
+                        self.info_frame.title_left_down_text.set(f"Удалено {count_del} - записей")
+            self.table.search_table_action()
+
+
 
     def main_menu_delete_person(self):
         """
@@ -71,7 +109,8 @@ class MainMenu:
             self.info_frame.title_left_down_text.set("Выберете Объект ...")
         else:
             # Создаем дочернее окно для добавления новой Персоны и назначения ему прав для выбранного Объекта
-            self.frame_person = fp.FramePerson(self.root, '', self.table.object_main, self.person_list, self.object_list)
+            self.frame_person = fp.FramePerson(self.root, '', self.table.object_main, self.person_list,
+                                               self.object_list)
             self.frame_person.geometry("400x400+50+50")
             self.frame_person.title('Редактирование доступа')
             self.frame_person.grab_set()
@@ -180,14 +219,16 @@ class MainMenu:
                         if _.key.upper() == self.file_key.upper():
                             self.info_frame.title_left_down_text.set("Такой ключ существует...")
                             # Если добавляется новый Объект
-                            if not flag_object_add: # Двойной импорт
+                            if not flag_object_add:  # Двойной импорт
                                 if frame_object.new_object:
                                     # В словарь добаляется необходимая запись
                                     if _.permission.get(frame_object.new_object.id):
                                         if _.permission[frame_object.new_object.id][2] == self.file_perm.upper():
-                                            print(f"Полный дубликат для прибора {self.open_object} ключ: {self.file_key.upper()}")
+                                            print(
+                                                f"Полный дубликат для прибора {self.open_object} ключ: {self.file_key.upper()}")
                                         else:
-                                            print('!!!! Расхождение прав доступа !!!! >>>> {self.open_object} ключ: {self.file_key}')
+                                            print(
+                                                '!!!! Расхождение прав доступа !!!! >>>> {self.open_object} ключ: {self.file_key}')
                                     else:
                                         _.permission[frame_object.new_object.id] = [frame_object.new_object.num,
                                                                                     '000000', self.file_perm.upper()]
@@ -196,12 +237,14 @@ class MainMenu:
                                     # В словарь добаляется необходимая запись
                                     if _.permission.get(self.old_object.id):
                                         if _.permission[self.old_object.id][2] == self.file_perm.upper():
-                                            print(f"Полный дубликат для прибора {self.open_object} ключ: {self.file_key.upper()}")
+                                            print(
+                                                f"Полный дубликат для прибора {self.open_object} ключ: {self.file_key.upper()}")
                                         else:
-                                            print('!!!! Расхождение прав доступа !!!! >>>> {self.open_object} ключ: {self.file_key}')
+                                            print(
+                                                '!!!! Расхождение прав доступа !!!! >>>> {self.open_object} ключ: {self.file_key}')
                                     else:
                                         _.permission[self.old_object.id] = [self.old_object.num,
-                                                                                    '000000', self.file_perm.upper()]
+                                                                            '000000', self.file_perm.upper()]
                             # Выключаем флаг добавления
                             flag_key_add = False
                             continue
@@ -212,7 +255,8 @@ class MainMenu:
                         # Если добавляется новый Объект
                         if not flag_object_add:
                             if frame_object.new_object:
-                                new_person.permission[frame_object.new_object.id] = [frame_object.new_object.num, '000000',
+                                new_person.permission[frame_object.new_object.id] = [frame_object.new_object.num,
+                                                                                     '000000',
                                                                                      self.file_perm.upper()]
                                 sl.save_log(
                                     f"{new_person.surname} {new_person.name} {new_person.key} - {frame_object.new_object.id} {frame_object.new_object.num} {frame_object.new_object.name} ",
@@ -220,8 +264,8 @@ class MainMenu:
                         else:
                             if self.old_object:
                                 new_person.permission[self.old_object.id] = [self.old_object.num,
-                                                                                     '000000',
-                                                                                     self.file_perm.upper()]
+                                                                             '000000',
+                                                                             self.file_perm.upper()]
                                 sl.save_log(
                                     f"{new_person.surname} {new_person.name} {new_person.key} - {self.old_object.id} {self.old_object.num} {self.old_object.name}",
                                     f"Импорт Персоны")
