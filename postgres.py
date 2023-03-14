@@ -73,12 +73,14 @@ class PostgessBase:
         insert_query = f"SELECT cardid FROM staff.card WHERE fullcardcode='{key}'"
         self.cursor.execute(insert_query)
         query = self.cursor.fetchall()
+        print(query)
         if query:
             cardid = query[0][0]
 
             insert_query = f"SELECT personid FROM staff.pass WHERE cardid = '{cardid}' and cardstatus = 1"
             self.cursor.execute(insert_query)
             query = self.cursor.fetchall()
+            print(query)
             if query:
                 personid = query[0][0]
                 insert_query = f"SELECT name, firstname, secondname FROM staff.person WHERE personid = '{personid}'"
@@ -89,6 +91,8 @@ class PostgessBase:
                     name, firstname, secondname = list_fio[0]
                     # print('->',name, firstname, secondname, key)
                     return name, firstname, secondname, key
+            else:
+                return '', '', '', ''
         else:
             return '', '', '', ''
 
@@ -105,13 +109,13 @@ class PostgessBase:
 if __name__ == '__main__':
     bd = PostgessBase()
     # a,b,c,d =bd.search_key('00000073D712')
-    # a, b, c, d = bd.search_key('000000559188')
-    # print(a,b,c,d)
+    a, b, c, d = bd.search_key('00000070F8FE')
+    print(a,b,c,d)
     # print(bd.select_date())
-    a = bd.search_fio('бур', '', '')
-    # print(a)
-    for _ in a:
-        print(_)
+    # a = bd.search_fio('бур', '', '')
+    # # print(a)
+    # for _ in a:
+    #     print(_)
     # print(bd.seach_card('000000559188'))
     # print(bd.seach_card('00000073D712'))
     # print(bd.seach_card('0000003DFAD9'))

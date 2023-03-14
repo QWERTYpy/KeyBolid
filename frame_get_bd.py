@@ -10,13 +10,13 @@ import saveloadini as sl
 
 # Всплывающее меню при создании или редактировании информации о объекте
 class Get_BD(tk.Toplevel):
-    def __init__(self, parent):
+    def __init__(self, parent, hex_key):
         super().__init__(parent)
         self.root = parent
-        self.search_table()
+        self.search_table(hex_key)
         self.main_table_create()
 
-    def search_table(self):
+    def search_table(self, hex_key):
         """
         Составляем интерфейс для поиска
         :return:
@@ -40,6 +40,7 @@ class Get_BD(tk.Toplevel):
         self.entry_hex = ttk.Entry(self)
         self.entry_hex.config(width=23)
         self.entry_hex.place(x=460, y=30)
+        self.entry_hex.insert(0, hex_key)
 
         self.btn_entry = ttk.Button(self, text='Искать ...', command=self.search_table_action, width=10)
         self.btn_entry.place(x=610, y=28)

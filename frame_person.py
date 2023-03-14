@@ -105,7 +105,7 @@ class FramePerson(tk.Toplevel):
         self.search_btn.place(x=250, y=60)
 
     def get_bd(self):
-        self.frame_get_bd = Get_BD(self)
+        self.frame_get_bd = Get_BD(self, self.entry_hex.get())
 
         self.frame_get_bd.geometry("790x400+50+50")
         self.frame_get_bd.title('Поиск в базе данных')
