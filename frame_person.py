@@ -81,6 +81,9 @@ class FramePerson(tk.Toplevel):
         self.entry_surname = ttk.Entry(self)
         self.entry_surname.place(x=100, y=0)
 
+        self.search_btn = ttk.Button(self, text='Взять из БД', command=self.click_btn_search)
+        self.search_btn.place(x=250, y=0)
+
         self.label_name = ttk.Label(self, text="Имя:")
         self.label_name.place(x=0, y=20)
         self.entry_name = ttk.Entry(self)
@@ -108,8 +111,11 @@ class FramePerson(tk.Toplevel):
 
         for _ in self.person_list:
             if _.key.upper() == self.entry_hex.get().upper():
+                self.entry_name.delete(0,tk.END)
                 self.entry_name.insert(0, _.name)
+                self.entry_surname.delete(0,tk.END)
                 self.entry_surname.insert(0, _.surname)
+                self.entry_patr.delete(0,tk.END)
                 self.entry_patr.insert(0, _.patronymic)
 
     def click_btn_save(self):
