@@ -70,10 +70,14 @@ class PostgessBase:
         return person_list
 
     def seach_card(self,key):
-        insert_query = f"SELECT fullcardcode FROM staff.card WHERE fullcardcode = '{key}' and cardstatus = '1'"
+        insert_query = f"SELECT cardstatus FROM staff.card WHERE fullcardcode = '{key}' and cardstatus = '1'"
         self.cursor.execute(insert_query)
-        key = self.cursor.fetchall()
-        print(key)
+        cardstatus = self.cursor.fetchall()
+        if len(cardstatus) == 0:
+            return 0
+        else:
+            return cardstatus[0][0]
+
 
 
 if __name__ == '__main__':
@@ -83,5 +87,6 @@ if __name__ == '__main__':
     # print(len(a))
     # for _ in a:
     #     print(_)
-    bd.seach_card('000000559188')
-    bd.seach_card('0000003DFAD9')
+    print(bd.seach_card('000000559188'))
+    print(bd.seach_card('00000073D712'))
+    print(bd.seach_card('0000003DFAD9'))

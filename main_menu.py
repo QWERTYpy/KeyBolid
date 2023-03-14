@@ -32,7 +32,6 @@ class MainMenu:
         self.open_object = 0  # Инициируем переменную содержащую номер импортируемого Объекта получаемого из названия файла
         self.main_menu = tk.Menu(self.root)
         self.old_object = None  # При импорте уже существующего Объекта
-        self.person_list_bd = []
         # Добавляем пункты меню
         self.main_menu.add_command(label="Сохранить", command=self.main_menu_save_object)
         self.main_menu.add_command(label="Загрузить", command=self.main_menu_load_object)
@@ -46,24 +45,17 @@ class MainMenu:
         if self.table.object_main == '000':
             self.info_frame.title_left_down_text.set("Выберите Объект ...")
         else:
-            self.info_frame.title_left_down_text.set("Формируется запрос ...")
-            time.sleep(0.1)
-            if not len(self.person_list_bd):
-                person_bd = PostgessBase()
-                self.person_list_bd = person_bd.search_fio('', '', '')
-            self.info_frame.title_left_down_text.set(f"Получено {len(self.person_list_bd)} - записей")
-            # Получаем список ключей существующих в БД
-            key_list = [_[4] for _ in self.person_list_bd]
+            person_bd = PostgessBase()
             # Пробегаем весь список персон соответсвующих выбранному Объекту
             count_del = 0
             for _ in self.table.people_table:
-                # Если ключа нет в БД, то удаляем его
-                if _[3] not in key_list:
+                # Если ключа возвращен, то удаляем его
+                if person_bd.seach_card(_[3]) != 1:
                     count_del += 1
                     # Находим указатель на интересующую персону
                     for __ in self.person_list:
                         if __.key == _[3]:
-                            sl.save_log(f"{_[0]} {_[1]} {_[2]} - {self.table.object_main}", f"Удаление Персоны")
+                            sl.save_log(f"{_[0]} {_[1]} {_[2]} {_[3]}- {self.table.object_main}", f"Удаление Персоны")
                             __.permission.pop(self.table.object_main)
 
                             if len(__.permission) == 0:
@@ -82,41 +74,45 @@ class MainMenu:
         """
         # Если ничего не выбрано
         if self.table.object_main == '000':
-            self.info_frame.title_left_down_text.set("Выберите Объект ...")
-            # -------
             # Получаем ключ из выбранной строки
-            select_person = str(self.table.main_table.item(self.table.main_table.selection())['values'][3])
-            for _ in self.person_list:
-                # Выбираем Персону соответсвующую ключу
-                if _.key == select_person:
-                    # Удаляем из списка прав запись соответсвующую выбранному Объекту
-                    answer = mb.askyesno(
-                        title="Удаление записи",
-                        message="Удалить все записи по выбранному человеку?")
-                    if answer:
-                        sl.save_log(f"{_.surname} {_.name} {_.key} - {self.table.object_main}", f"Удаление Персоны")
-                        self.person_list.remove(_)
-                        break
+            if self.table.main_table.selection():
+                select_person = str(self.table.main_table.item(self.table.main_table.selection())['values'][3])
+                for _ in self.person_list:
+                    # Выбираем Персону соответсвующую ключу
+                    if _.key == select_person:
+                        # Удаляем из списка прав запись соответсвующую выбранному Объекту
+                        answer = mb.askyesno(
+                            title="Удаление записи",
+                            message="Удалить все записи по выбранному человеку?")
+                        if answer:
+                            sl.save_log(f"{_.surname} {_.name} {_.key} - {self.table.object_main}", f"Удаление Персоны")
+                            self.person_list.remove(_)
+                            break
 
-            # Обновляем записи в таблице
-            self.table.search_table_action()
-            # -----
+                # Обновляем записи в таблице
+                self.table.search_table_action()
+                # -----
+            else:
+                self.info_frame.title_left_down_text.set("Выберите Объект ...")
         else:
             # Получаем ключ из выбранной строки
-            select_person = str(self.table.main_table.item(self.table.main_table.selection())['values'][3])
-            for _ in self.person_list:
-                # Выбираем Персону соответсвующую ключу
-                if _.key == select_person:
-                    # Удаляем из списка прав запись соответвующую выбранному Объекту
-                    sl.save_log(f"{_.surname} {_.name} {_.key} - {self.table.object_main}", f"Удаление Персоны")
-                    _.permission.pop(self.table.object_main)
+            if self.table.main_table.selection():
+                select_person = str(self.table.main_table.item(self.table.main_table.selection())['values'][3])
+                for _ in self.person_list:
+                    # Выбираем Персону соответсвующую ключу
+                    if _.key == select_person:
+                        # Удаляем из списка прав запись соответвующую выбранному Объекту
+                        sl.save_log(f"{_.surname} {_.name} {_.key} - {self.table.object_main}", f"Удаление Персоны")
+                        _.permission.pop(self.table.object_main)
 
-                    if len(_.permission) == 0:
-                        self.person_list.remove(_)
-                        break
+                        if len(_.permission) == 0:
+                            self.person_list.remove(_)
+                            break
 
-            # Обновляем записи в таблице
-            self.table.search_table_action()
+                # Обновляем записи в таблице
+                self.table.search_table_action()
+            else:
+                self.info_frame.title_left_down_text.set("Выберите Объект ...")
 
     def main_menu_load_person(self):
         """
