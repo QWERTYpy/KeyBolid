@@ -3,7 +3,6 @@ from tkinter import ttk
 from postgres import PostgessBase
 
 
-
 # Всплывающее меню при создании или редактировании информации о объекте
 class Get_BD(tk.Toplevel):
     def __init__(self, parent, hex_key):
@@ -96,6 +95,7 @@ class Get_BD(tk.Toplevel):
         self.btn_entry.place(x=610, y=340)
 
     def add_button(self):
+        # Передаем данные в поля формы
         name, firstname, secondname, key, _ = self.main_table.item(self.main_table.selection())['values']
         if name or firstname or secondname or key:
             self.root.entry_name.delete(0, tk.END)
@@ -107,18 +107,3 @@ class Get_BD(tk.Toplevel):
             self.root.entry_hex.delete(0, tk.END)
             self.root.entry_hex.insert(0, key)
             self.destroy()
-
-    def left_button_double(self, event):
-        # Если ничего не выбрано
-        if self.object_main == '000':
-            return False
-        # # Если выбран Объект открываем дочернее окно
-        # hex_key = str(self.main_table.item(self.main_table.selection())['values'][3])
-        # # Костыль. Когда берется значение из ячейки он преобразутеся в int
-        # if len(hex_key) == 6: hex_key = f'000000{hex_key}'
-        # if len(hex_key) == 10: hex_key = f'00{hex_key}'
-        # self.frame_person = fp.FramePerson(self.root,
-        #                                    hex_key,
-        #                                    self.object_main,
-        #                                    self.person_list,
-        #                                    self.object_list)

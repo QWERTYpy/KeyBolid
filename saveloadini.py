@@ -4,12 +4,14 @@ from object import ObjectBolid
 import os
 import time
 
+
 def save_log(edit_data, mess):
     # Файл для сохранения изменений
     path = 'log_bd.txt'
-    file = open(path,'a')
+    file = open(path, 'a')
     file.write(f'{time.strftime("%d-%m-%y %H:%M", time.localtime())} --> {mess} : {edit_data}\n')
     file.close()
+
 
 def load_person_ini():
     # Загружаем объекты из файла
@@ -34,6 +36,7 @@ def load_person_ini():
         list_person.append(pers)
     return list_person
 
+
 def save_person_ini(list_person):
     # Сохраняем созданные объекты в файл
     path = 'person.ini'
@@ -43,15 +46,14 @@ def save_person_ini(list_person):
         for _perm in _.permission:
             str_permission += f"{_perm}, {_.permission[_perm][0]}, {_.permission[_perm][1]}, {_.permission[_perm][2].upper()};"
         config[f"{_.key.upper()}"] = {'name': _.name,
-                              'surname': _.surname,
-                              'patronymic': _.patronymic,
-                              'permission': str_permission}
-
-
+                                      'surname': _.surname,
+                                      'patronymic': _.patronymic,
+                                      'permission': str_permission}
 
     # shutil.copy('example.ini', 'example_tmp.ini')
     with open(path, 'w', encoding='utf-8') as configfile:
         config.write(configfile)
+
 
 def save_object_ini(list_object):
     # Сохраняем созданные объекты в файл
@@ -60,13 +62,11 @@ def save_object_ini(list_object):
     for _ in list_object:
         str_permission = ''
         config[f"{_.id}"] = {'num': _.num,
-                              'name': _.name,
-                              'type': _.type,
+                             'name': _.name,
+                             'type': _.type,
                              'ver': _.ver,
                              'interface': _.interface,
-                              'comment': _.comment}
-
-
+                             'comment': _.comment}
 
     # shutil.copy('example.ini', 'example_tmp.ini')
     with open(path, 'w', encoding='utf-8') as configfile:
@@ -95,8 +95,9 @@ def load_object_ini():
         list_obj.append(obj)
     return list_obj
 
+
 if __name__ == '__main__':
-    aa =load_person_ini()
+    aa = load_person_ini()
     for _ in aa:
         print(_.permission)
     # print(list_person_table(aa))

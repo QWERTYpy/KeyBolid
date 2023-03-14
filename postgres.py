@@ -1,14 +1,12 @@
 import psycopg2
 from psycopg2 import Error
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
-# import time
-
 import configparser
 
 # Инициализация основных переменных
 config = configparser.ConfigParser()
 config.read("postgres.ini", encoding="utf-8")
-dict_conf = {}
+dict_conf = {}  # Создаем словарь для хранения параметров
 
 # Настройка БД
 dict_conf['user'] = config["postgres"]["user"]
@@ -18,21 +16,16 @@ dict_conf['port'] = config["postgres"]["port"]
 dict_conf['database'] = config["postgres"]["database"]
 
 
-# print(dict_conf)
-
-
 class PostgessBase:
     def __init__(self):
         try:
             # Подключение к существующей базе данных
             self.connection = psycopg2.connect(user=dict_conf['user'],
-                                               # пароль, который указали при установке PostgreSQL
                                                password=dict_conf['password'],
                                                host=dict_conf['host'],
                                                port=dict_conf['port'],
                                                database=dict_conf['database'])
             self.connection.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-
             # Курсор для выполнения операций с базой данных
             self.cursor = self.connection.cursor()
 
@@ -43,53 +36,48 @@ class PostgessBase:
         try:
             if self.connection:
                 self.cursor.close()
-                # self.connection.close()
+                self.connection.close()
                 print("Соединение с PostgreSQL закрыто")
         except (Exception, Error) as error:
             print("Ошибка при открытии", error)
 
     def search_fio(self, name, firstname, secondname):
+        # Поиск в базе данных по ФИО
         insert_query = f"SELECT * FROM staff.person WHERE name ilike '{name}%' AND " \
                        f"firstname ilike '{firstname}%' " \
-                       f"AND secondname ilike '{secondname}%' "  # AND  personcatid IS NOT NULL"
+                       f"AND secondname ilike '{secondname}%' "
         self.cursor.execute(insert_query)
-        person_list = []
+        person_list = []  # Список найденных Персон
         for _ in self.cursor.fetchall():
-            # _[0] = personid
             insert_query = f"SELECT cardid FROM staff.pass WHERE personid = '{_[0]}' and cardstatus = 1"
             self.cursor.execute(insert_query)
             cardid = self.cursor.fetchall()
 
             if len(cardid) > 0:
-                # print(cardid)
                 insert_query = f"SELECT fullcardcode FROM staff.card WHERE cardid = '{cardid[0][0]}'"
                 self.cursor.execute(insert_query)
                 key = self.cursor.fetchall()
-                person_list.append([_[2], _[3], _[4], key[0][0], _[5]])  # name, firstname, secondname, tableno, key
+                person_list.append([_[2], _[3], _[4], key[0][0], _[5]])  # name, firstname, secondname, key, tableno
 
         return person_list
 
     def search_key(self, key):
+        # Поиск в базе по ключу
         insert_query = f"SELECT cardid FROM staff.card WHERE fullcardcode='{key}'"
         self.cursor.execute(insert_query)
         query = self.cursor.fetchall()
-        print(query)
         if query:
             cardid = query[0][0]
-
             insert_query = f"SELECT personid FROM staff.pass WHERE cardid = '{cardid}' and cardstatus = 1"
             self.cursor.execute(insert_query)
             query = self.cursor.fetchall()
-            print(query)
             if query:
                 personid = query[0][0]
                 insert_query = f"SELECT name, firstname, secondname FROM staff.person WHERE personid = '{personid}'"
                 self.cursor.execute(insert_query)
                 list_fio = (self.cursor.fetchall())
-                # print(len(self.cursor.fetchall()))
                 if len(list_fio):
                     name, firstname, secondname = list_fio[0]
-                    # print('->',name, firstname, secondname, key)
                     return name, firstname, secondname, key
             else:
                 return '', '', '', ''
@@ -97,7 +85,8 @@ class PostgessBase:
             return '', '', '', ''
 
     def search_card(self, key):
-        insert_query = f"SELECT cardstatus FROM staff.card WHERE fullcardcode = '{key}' and cardstatus = '1'"
+        # Поиск статуса карты
+        insert_query = f"SELECT cardstatus FROM staff.card WHERE fullcardcode = '{key}' "#and cardstatus = '1'"
         self.cursor.execute(insert_query)
         cardstatus = self.cursor.fetchall()
         if len(cardstatus) == 0:
@@ -109,13 +98,13 @@ class PostgessBase:
 if __name__ == '__main__':
     bd = PostgessBase()
     # a,b,c,d =bd.search_key('00000073D712')
-    a, b, c, d = bd.search_key('00000070F8FE')
-    print(a,b,c,d)
+    # a, b, c, d = bd.search_key('00000070F8FE')
+    # print(a, b, c, d)
     # print(bd.select_date())
     # a = bd.search_fio('бур', '', '')
     # # print(a)
     # for _ in a:
     #     print(_)
-    # print(bd.seach_card('000000559188'))
-    # print(bd.seach_card('00000073D712'))
-    # print(bd.seach_card('0000003DFAD9'))
+    print(bd.search_card('000000559188'))
+    print(bd.search_card('00000073D712'))
+    print(bd.search_card('0000003DFAD9'))

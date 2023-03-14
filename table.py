@@ -8,7 +8,7 @@ import sig10
 
 class Table:
     def __init__(self, root, info_frame, object_list, person_list):
-        self.flag_change = False
+        self.flag_change = False  # Флаг изменений в записях
         self.root = root  # Указатель на основное окно
         self.object_list = object_list  # Список Объектов
         self.person_list = person_list  # Список Персон
@@ -59,8 +59,10 @@ class Table:
         # Если выбран Объект открываем дочернее окно
         hex_key = str(self.main_table.item(self.main_table.selection())['values'][3])
         # Костыль. Когда берется значение из ячейки он преобразутеся в int
-        if len(hex_key) == 6: hex_key = f'000000{hex_key}'
-        if len(hex_key) == 10: hex_key = f'00{hex_key}'
+        if len(hex_key) == 6:
+            hex_key = f'000000{hex_key}'
+        if len(hex_key) == 10:
+            hex_key = f'00{hex_key}'
         self.frame_person = fp.FramePerson(self.root,
                                            hex_key,
                                            self.object_main,
@@ -114,7 +116,8 @@ class Table:
                                  and self.entry_hex.get().upper() in _.key.upper()
                                  and (self.object_main in _.permission.keys() or self.object_main == '000')]
         else:
-            self.people_table = [(_.surname, _.name, _.patronymic, str(_.key), _.get_perm_obj()) for _ in self.person_list
+            self.people_table = [(_.surname, _.name, _.patronymic, str(_.key), _.get_perm_obj()) for _ in
+                                 self.person_list
                                  if (self.object_main in _.permission.keys() or self.object_main == '000')]
         # Выводим данные в таблицу
         for person in self.people_table:

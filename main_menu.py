@@ -1,5 +1,4 @@
 # Верхнее меню
-import time
 import tkinter as tk
 import saveloadini as sl
 import crc8bolid as crc
@@ -47,11 +46,9 @@ class MainMenu:
         else:
             person_bd = PostgessBase()
             # Пробегаем весь список персон соответсвующих выбранному Объекту
-            count_del = 0
             for _ in self.table.people_table:
-                # Если ключа возвращен, то удаляем его
+                # Если ключ возвращен, то удаляем его
                 if person_bd.search_card(_[3]) != 1:
-                    count_del += 1
                     # Находим указатель на интересующую персону
                     for __ in self.person_list:
                         if __.key == _[3]:
@@ -61,11 +58,8 @@ class MainMenu:
                             if len(__.permission) == 0:
                                 self.person_list.remove(__)
                                 break
-                        # Обновляем записи в таблице
-                        self.info_frame.title_left_down_text.set(f"Удалено {count_del} - записей")
+            # Обновляем записи в таблице
             self.table.search_table_action()
-
-
 
     def main_menu_delete_person(self):
         """
