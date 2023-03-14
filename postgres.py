@@ -49,9 +49,9 @@ class PostgessBase:
             print("Ошибка при открытии", error)
 
     def search_fio(self, name, firstname, secondname):
-        insert_query = f"SELECT * FROM staff.person WHERE name ilike '%{name}%' AND " \
-                       f"firstname ilike '%{firstname}%' " \
-                       f"AND secondname ilike '%{secondname}%' "  # AND  personcatid IS NOT NULL"
+        insert_query = f"SELECT * FROM staff.person WHERE name ilike '{name}%' AND " \
+                       f"firstname ilike '{firstname}%' " \
+                       f"AND secondname ilike '{secondname}%' "  # AND  personcatid IS NOT NULL"
         self.cursor.execute(insert_query)
         person_list = []
         for _ in self.cursor.fetchall():

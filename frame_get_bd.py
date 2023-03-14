@@ -1,11 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from postgres import PostgessBase
-from person import Person
-import object
-from bolid_perm import Signal10, C2000_4
-import re
-import saveloadini as sl
+
 
 
 # Всплывающее меню при создании или редактировании информации о объекте
