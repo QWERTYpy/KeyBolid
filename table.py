@@ -106,7 +106,7 @@ class Table:
         self.main_table.delete(*self.main_table.get_children())
         # Заполняем данными удовлетворяющими критериям поиска
         # Если заполнено одно из полей
-        if self.entry_surname.get() or self.entry_name or self.entry_patronymic or self.entry_hex:
+        if self.entry_surname.get() or self.entry_name.get() or self.entry_patronymic.get() or self.entry_hex.get():
             self.people_table = [(_.surname, _.name, _.patronymic, _.key, _.get_perm_obj()) for _ in self.person_list
                                  if self.entry_surname.get().lower() in _.surname.lower()
                                  and self.entry_name.get().lower() in _.name.lower()

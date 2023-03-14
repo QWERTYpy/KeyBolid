@@ -5,6 +5,7 @@ import object
 from bolid_perm import Signal10, C2000_4
 import re
 import saveloadini as sl
+from frame_get_bd import Get_BD
 
 
 # Всплывающее меню при создании или редактировании информации о объекте
@@ -81,7 +82,7 @@ class FramePerson(tk.Toplevel):
         self.entry_surname = ttk.Entry(self)
         self.entry_surname.place(x=100, y=0)
 
-        self.search_btn = ttk.Button(self, text='Взять из БД', command=self.click_btn_search)
+        self.search_btn = ttk.Button(self, text='Взять из БД', command=self.get_bd)
         self.search_btn.place(x=250, y=0)
 
         self.label_name = ttk.Label(self, text="Имя:")
@@ -102,6 +103,14 @@ class FramePerson(tk.Toplevel):
 
         self.search_btn = ttk.Button(self, text='Искать', command=self.click_btn_search)
         self.search_btn.place(x=250, y=60)
+
+    def get_bd(self):
+        self.frame_get_bd = Get_BD(self)
+
+        self.frame_get_bd.geometry("790x400+50+50")
+        self.frame_get_bd.title('Поиск в базе данных')
+        self.frame_get_bd.grab_set()
+        self.frame_get_bd.wait_window()
 
     def is_valid(self,newval):
         return re.match("^[0-9ABCDEFabcdef]{0,12}$", newval) is not None
@@ -149,4 +158,5 @@ class FramePerson(tk.Toplevel):
         if self.flag_add_new and not flag_dubl_key:
             self.person_list.append(self.person_cur)
         # Добавляем запись в лог
-        sl.save_log(f"{self.person_cur.surname} {self.person_cur.name} {self.person_cur.key} - {self.object}", f"Добавление Персоны")
+        sl.save_log(f"{self.person_cur.surname} {self.person_cur.name} {self.person_cur.patronymic} {self.person_cur.key} - {self.object}", f"Изменнение данных")
+        self.destroy()

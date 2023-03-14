@@ -50,7 +50,7 @@ class MainMenu:
             count_del = 0
             for _ in self.table.people_table:
                 # Если ключа возвращен, то удаляем его
-                if person_bd.seach_card(_[3]) != 1:
+                if person_bd.search_card(_[3]) != 1:
                     count_del += 1
                     # Находим указатель на интересующую персону
                     for __ in self.person_list:
