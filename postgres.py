@@ -69,12 +69,19 @@ class PostgessBase:
 
         return person_list
 
+    def seach_card(self,key):
+        insert_query = f"SELECT fullcardcode FROM staff.card WHERE fullcardcode = '{key}' and cardstatus = '1'"
+        self.cursor.execute(insert_query)
+        key = self.cursor.fetchall()
+        print(key)
 
 
 if __name__ == '__main__':
     bd = PostgessBase()
     # print(bd.select_date())
-    a = bd.search_fio('бур', 'мак', 'вл')
-    print(len(a))
-    for _ in a:
-        print(_)
+    # a = bd.search_fio('ноздр', 'свет', 'п')
+    # print(len(a))
+    # for _ in a:
+    #     print(_)
+    bd.seach_card('000000559188')
+    bd.seach_card('0000003DFAD9')

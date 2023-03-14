@@ -45,7 +45,7 @@ class Table:
         self.main_table.configure(yscroll=self.scrollbar.set, height=20)
         self.scrollbar.place(relx=1.0, relheight=1.0, in_=self.main_table, bordermode='outside')
         # Составляем данные для отображения
-        self.people_table = [(_.surname, _.name, _.patronymic, _.key, _.get_perm_obj()) for _ in self.person_list]
+        self.people_table = [(_.surname, _.name, _.patronymic, str(_.key), _.get_perm_obj()) for _ in self.person_list]
         for person in self.people_table:
             self.main_table.insert("", tk.END, values=person)
         self.info_frame.title_left_down_text.set(f"Найдено {len(self.people_table)} записей")
@@ -57,8 +57,12 @@ class Table:
         if self.object_main == '000':
             return False
         # Если выбран Объект открываем дочернее окно
+        hex_key = str(self.main_table.item(self.main_table.selection())['values'][3])
+        # Костыль. Когда берется значение из ячейки он преобразутеся в int
+        if len(hex_key) == 6: hex_key = f'000000{hex_key}'
+        if len(hex_key) == 10: hex_key = f'00{hex_key}'
         self.frame_person = fp.FramePerson(self.root,
-                                           str(self.main_table.item(self.main_table.selection())['values'][3]),
+                                           hex_key,
                                            self.object_main,
                                            self.person_list,
                                            self.object_list)
@@ -110,7 +114,7 @@ class Table:
                                  and self.entry_hex.get().upper() in _.key.upper()
                                  and (self.object_main in _.permission.keys() or self.object_main == '000')]
         else:
-            self.people_table = [(_.surname, _.name, _.patronymic, _.key, _.get_perm_obj()) for _ in self.person_list
+            self.people_table = [(_.surname, _.name, _.patronymic, str(_.key), _.get_perm_obj()) for _ in self.person_list
                                  if (self.object_main in _.permission.keys() or self.object_main == '000')]
         # Выводим данные в таблицу
         for person in self.people_table:

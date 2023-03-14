@@ -12,6 +12,7 @@ class FramePerson(tk.Toplevel):
     def __init__(self, parent, key, object, person_list, object_list):
         super().__init__(parent)
         self.key = key
+        print(key)
         self.object = object
         self.person_list = person_list
         self.object_list = object_list
