@@ -114,11 +114,17 @@ class Table:
         # Если заполнено одно из полей
         if self.entry_surname.get() or self.entry_name.get() or self.entry_patronymic.get() or self.entry_hex.get():
             self.people_table = [(_.surname, _.name, _.patronymic, _.key, _.get_perm_obj()) for _ in self.person_list
-                                 if self.entry_surname.get().lower() in _.surname.lower()
-                                 and self.entry_name.get().lower() in _.name.lower()
-                                 and self.entry_patronymic.get().lower() in _.patronymic.lower()
+                                 if not _.surname.lower().find(self.entry_surname.get().lower())
+                                 and not _.name.lower().find(self.entry_name.get().lower())
+                                 and not _.patronymic.lower().find(self.entry_patronymic.get().lower())
                                  and self.entry_hex.get().upper() in _.key.upper()
                                  and (self.object_main in _.permission.keys() or self.object_main == '000')]
+            # self.people_table = [(_.surname, _.name, _.patronymic, _.key, _.get_perm_obj()) for _ in self.person_list
+            #                      if self.entry_surname.get().lower() in _.surname.lower()
+            #                      and self.entry_name.get().lower() in _.name.lower()
+            #                      and self.entry_patronymic.get().lower() in _.patronymic.lower()
+            #                      and self.entry_hex.get().upper() in _.key.upper()
+            #                      and (self.object_main in _.permission.keys() or self.object_main == '000')]
         else:
             self.people_table = [(_.surname, _.name, _.patronymic, str(_.key), _.get_perm_obj()) for _ in
                                  self.person_list
