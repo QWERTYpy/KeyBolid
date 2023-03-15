@@ -96,14 +96,15 @@ class Get_BD(tk.Toplevel):
 
     def add_button(self):
         # Передаем данные в поля формы
-        name, firstname, secondname, key, _ = self.main_table.item(self.main_table.selection())['values']
-        if name or firstname or secondname or key:
-            self.root.entry_name.delete(0, tk.END)
-            self.root.entry_name.insert(0, firstname)
-            self.root.entry_surname.delete(0, tk.END)
-            self.root.entry_surname.insert(0, name)
-            self.root.entry_patr.delete(0, tk.END)
-            self.root.entry_patr.insert(0, secondname)
-            self.root.entry_hex.delete(0, tk.END)
-            self.root.entry_hex.insert(0, key)
-            self.destroy()
+        if self.main_table.selection():
+            name, firstname, secondname, key, _ = self.main_table.item(self.main_table.selection())['values']
+            if name or firstname or secondname or key:
+                self.root.entry_name.delete(0, tk.END)
+                self.root.entry_name.insert(0, firstname)
+                self.root.entry_surname.delete(0, tk.END)
+                self.root.entry_surname.insert(0, name)
+                self.root.entry_patr.delete(0, tk.END)
+                self.root.entry_patr.insert(0, secondname)
+                self.root.entry_hex.delete(0, tk.END)
+                self.root.entry_hex.insert(0, key)
+                self.destroy()

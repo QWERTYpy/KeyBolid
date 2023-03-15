@@ -263,7 +263,11 @@ class MainMenu:
                     # Если ключ еще не добавлен
                     if flag_key_add:
                         self.info_frame.title_left_down_text.set("Добавление ключа...")
-                        new_person = Person(key=self.file_key.upper())
+                        if self.table.bd.flag_BD:
+                            name, firstname, secondname, key = self.table.bd.search_key(self.file_key.upper())
+                            new_person = Person(name=firstname, surname=name, patronymic=secondname, key=key)
+                        else:
+                            new_person = Person(key=self.file_key.upper())
                         # Если добавляется новый Объект
                         if not flag_object_add:
                             if frame_object.new_object:
