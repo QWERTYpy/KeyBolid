@@ -4,6 +4,7 @@ import tkinter as tk
 import frame_person as fp
 import c20004
 import sig10
+from postgres import PostgessBase
 
 
 class Table:
@@ -21,6 +22,9 @@ class Table:
         self.search_table()
         # Отображаем таблицу
         self.main_table_create()
+        # Проверяем доступность БД
+        self.bd = PostgessBase()
+
 
     def main_table_create(self):
         # Составляем колонки
@@ -63,7 +67,7 @@ class Table:
             hex_key = f'000000{hex_key}'
         if len(hex_key) == 10:
             hex_key = f'00{hex_key}'
-        self.frame_person = fp.FramePerson(self.root,
+        self.frame_person = fp.FramePerson(self.root,self,
                                            hex_key,
                                            self.object_main,
                                            self.person_list,

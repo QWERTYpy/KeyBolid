@@ -10,9 +10,10 @@ from frame_get_bd import Get_BD
 
 # Всплывающее меню при создании или редактировании информации о объекте
 class FramePerson(tk.Toplevel):
-    def __init__(self, parent, key, object, person_list, object_list):
+    def __init__(self, parent, table, key, object, person_list, object_list):
         super().__init__(parent)
         self.key = key
+        self.table = table
         print(key)
         self.object = object
         self.person_list = person_list
@@ -84,6 +85,8 @@ class FramePerson(tk.Toplevel):
 
         self.search_btn = ttk.Button(self, text='Взять из БД', command=self.get_bd)
         self.search_btn.place(x=250, y=0)
+        if not self.table.bd.flag_BD:
+            self.search_btn['state'] = 'disabled'
 
         self.label_name = ttk.Label(self, text="Имя:")
         self.label_name.place(x=0, y=20)

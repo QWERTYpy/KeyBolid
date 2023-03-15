@@ -28,8 +28,10 @@ class PostgessBase:
             self.connection.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
             # Курсор для выполнения операций с базой данных
             self.cursor = self.connection.cursor()
+            self.flag_BD = True
 
         except (Exception, Error) as error:
+            self.flag_BD = False
             print("Ошибка при работе с PostgreSQL", error)
 
     def __del__(self):
@@ -105,6 +107,7 @@ if __name__ == '__main__':
     # # print(a)
     # for _ in a:
     #     print(_)
-    print(bd.search_card('000000559188'))
-    print(bd.search_card('00000073D712'))
-    print(bd.search_card('0000003DFAD9'))
+    if bd.flag_BD:
+        print(bd.search_card('000000559188'))
+        print(bd.search_card('00000073D712'))
+        print(bd.search_card('0000003DFAD9'))

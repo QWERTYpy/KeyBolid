@@ -1,14 +1,21 @@
-# import binascii
+import binascii
+import binhex
+import html
 # import re
 # import crc8bolid as crc
 #
 #
 # line_cursor = 0
-# file = open('exp_key/71.ki', 'rb')
-# # file = open('53.ki', 'rb')
-# # for line in file:
-# #     # print(line)
-# #     print(binascii.hexlify(line))
+file = open('71/1.ki', 'rb')
+# # file = open('53.ki', 'rt')
+for line in file:
+    print(line)
+    # print(line.decode('cp1252'))
+    # print(line.decode('ansi'))
+    # print(html.escape(line.decode('ansi')))
+    print(binhex.binhex(line))
+    print(binascii.hexlify(line))
+
 # # file = open(filepath, 'rb')
 # cursor_str = False
 # count_key = 0
@@ -47,6 +54,9 @@
 #
 # file.close()
 #
-import time
-
-print(time.strftime("%d%m%y_%H:%M", time.localtime()))
+# import time
+#
+# print(time.strftime("%d%m%y_%H:%M", time.localtime()))
+a= b'\x04\x00\x00\x00\x00\x00\x000\xf9\x19\x00\x00\x00\x00\x00\xb1\x02\x00\x00\x01\x00\x00\x00\n'
+print(a.decode('ansi'))
+print(a.decode('cp1252'))

@@ -37,6 +37,9 @@ class MainMenu:
         self.main_menu.add_command(label="Добавить", command=self.main_menu_load_person)
         self.main_menu.add_command(label="Удалить", command=self.main_menu_delete_person)
         self.main_menu.add_command(label="Удалить возвращенные", command=self.main_menu_delete_return)
+        # Если соединение с БД отсутвет, то отключаем
+        if not self.table.bd.flag_BD:
+            self.main_menu.entryconfig("Удалить возвращенные", state="disabled")
         self.root.config(menu=self.main_menu)
 
     def main_menu_delete_return(self):
@@ -118,7 +121,7 @@ class MainMenu:
             self.info_frame.title_left_down_text.set("Выберете Объект ...")
         else:
             # Создаем дочернее окно для добавления новой Персоны и назначения ему прав для выбранного Объекта
-            self.frame_person = fp.FramePerson(self.root, '', self.table.object_main, self.person_list,
+            self.frame_person = fp.FramePerson(self.root, self.table, '', self.table.object_main, self.person_list,
                                                self.object_list)
             self.frame_person.geometry("400x400+50+50")
             self.frame_person.title('Редактирование доступа')
