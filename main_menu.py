@@ -105,8 +105,10 @@ class MainMenu:
                     # Выбираем Персону соответсвующую ключу
                     if _.key == select_person:
                         # Удаляем из списка прав запись соответвующую выбранному Объекту
-                        sl.save_log(f"{_.surname} {_.name} {_.key} - {self.object_list[int(self.table.object_main)].num} {self.object_list[int(self.table.object_main)].name}", f"Удаление Персоны")
-                        _.permission.pop(self.table.object_main)
+                        for __ in self.object_list:
+                            if __.id == self.table.object_main:
+                                sl.save_log(f"{_.surname} {_.name} {_.key} - {__.num} {__.name}", f"Удаление Персоны")
+                                _.permission.pop(self.table.object_main)
 
                         if len(_.permission) == 0:
                             self.person_list.remove(_)

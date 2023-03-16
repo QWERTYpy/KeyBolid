@@ -97,7 +97,7 @@ def load_object_ini():
 
 
 if __name__ == '__main__':
-    aa = load_person_ini()
+    aa = load_object_ini()
     for _ in aa:
-        print(_.permission)
+        print(_.id,_.num)
     # print(list_person_table(aa))
