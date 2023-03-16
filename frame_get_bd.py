@@ -61,7 +61,7 @@ class Get_BD(tk.Toplevel):
                 self.main_table.insert("", tk.END, values=person)
 
         elif self.entry_hex.get():
-            print('Seach hex')
+            # print('Seach hex')
             for _ in pb.search_key(self.entry_hex.get()):
                 name, firstname, secondname, key = _
                 if name or firstname or secondname:

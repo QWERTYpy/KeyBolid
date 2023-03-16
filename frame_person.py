@@ -14,7 +14,7 @@ class FramePerson(tk.Toplevel):
         super().__init__(parent)
         self.key = key
         self.table = table
-        print(key)
+        # print(key)
         self.object = object
         self.person_list = person_list
         self.object_list = object_list
