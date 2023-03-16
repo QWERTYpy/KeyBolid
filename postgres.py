@@ -73,7 +73,6 @@ class PostgessBase:
         insert_query = f"SELECT cardid, fullcardcode FROM staff.card WHERE fullcardcode ilike '%{key}%'"
         self.cursor.execute(insert_query)
         query = self.cursor.fetchall()
-        print(query)
         list_query = []
         for _query in query:
         # if query:

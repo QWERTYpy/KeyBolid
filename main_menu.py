@@ -74,6 +74,8 @@ class MainMenu:
             # Получаем ключ из выбранной строки
             if self.table.main_table.selection():
                 select_person = str(self.table.main_table.item(self.table.main_table.selection())['values'][3])
+                if len(select_person) < 12:
+                    select_person = '000000' + select_person[-6:]
                 for _ in self.person_list:
                     # Выбираем Персону соответсвующую ключу
                     if _.key == select_person:
@@ -95,6 +97,8 @@ class MainMenu:
             # Получаем ключ из выбранной строки
             if self.table.main_table.selection():
                 select_person = str(self.table.main_table.item(self.table.main_table.selection())['values'][3])
+                if len(select_person) < 12:
+                    select_person = '000000' + select_person[-6:]
                 for _ in self.person_list:
                     # Выбираем Персону соответсвующую ключу
                     if _.key == select_person:
