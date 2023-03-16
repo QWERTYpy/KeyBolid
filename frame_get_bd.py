@@ -62,9 +62,10 @@ class Get_BD(tk.Toplevel):
 
         elif self.entry_hex.get():
             print('Seach hex')
-            name, firstname, secondname, key = pb.search_key(self.entry_hex.get())
-            if name or firstname or secondname:
-                self.main_table.insert("", tk.END, values=[name, firstname, secondname, key, ''])
+            for _ in pb.search_key(self.entry_hex.get()):
+                name, firstname, secondname, key = _
+                if name or firstname or secondname:
+                    self.main_table.insert("", tk.END, values=[name, firstname, secondname, key, ''])
         else:
             pass
 
@@ -98,6 +99,8 @@ class Get_BD(tk.Toplevel):
         # Передаем данные в поля формы
         if self.main_table.selection():
             name, firstname, secondname, key, _ = self.main_table.item(self.main_table.selection())['values']
+            if len(str(key)) < 12:
+                key = '000000'+str(key)[-6:]
             if name or firstname or secondname or key:
                 self.root.entry_name.delete(0, tk.END)
                 self.root.entry_name.insert(0, firstname)

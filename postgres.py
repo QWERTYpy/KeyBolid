@@ -59,17 +59,26 @@ class PostgessBase:
                 insert_query = f"SELECT fullcardcode FROM staff.card WHERE cardid = '{cardid[0][0]}'"
                 self.cursor.execute(insert_query)
                 key = self.cursor.fetchall()
-                person_list.append([_[2], _[3], _[4], key[0][0], _[5]])  # name, firstname, secondname, key, tableno
+                # Отбрасываем лишние байты
+                if key[0][0][:6] == '000000':
+                    key = key[0][0]
+                else:
+                    key = '000000'+key[0][0][6:]
+                person_list.append([_[2], _[3], _[4], key, _[5]])  # name, firstname, secondname, key, tableno
 
         return person_list
 
     def search_key(self, key):
         # Поиск в базе по ключу
-        insert_query = f"SELECT cardid FROM staff.card WHERE fullcardcode='{key}'"
+        insert_query = f"SELECT cardid, fullcardcode FROM staff.card WHERE fullcardcode ilike '%{key}%'"
         self.cursor.execute(insert_query)
         query = self.cursor.fetchall()
-        if query:
-            cardid = query[0][0]
+        print(query)
+        list_query = []
+        for _query in query:
+        # if query:
+            cardid = _query[0]
+            fullcardcode = '000000'+_query[1][-6:]
             insert_query = f"SELECT personid FROM staff.pass WHERE cardid = '{cardid}' and cardstatus = 1"
             self.cursor.execute(insert_query)
             query = self.cursor.fetchall()
@@ -80,15 +89,18 @@ class PostgessBase:
                 list_fio = (self.cursor.fetchall())
                 if len(list_fio):
                     name, firstname, secondname = list_fio[0]
-                    return name, firstname, secondname, key
+                    list_query.append([name, firstname, secondname, fullcardcode])
             else:
-                return '', '', '', ''
-        else:
-            return '', '', '', ''
+                list_query.append(['','','',''])
+        # else:
+        #     return '', '', '', ''
+        return list_query
 
     def search_card(self, key):
         # Поиск статуса карты
-        insert_query = f"SELECT cardstatus FROM staff.card WHERE fullcardcode = '{key}' "#and cardstatus = '1'"
+        key = key[-6:]  # Берём крайние 6 символов
+        # Проверяем совпадение этих 6 символов с конца
+        insert_query = f"SELECT cardstatus FROM staff.card WHERE fullcardcode ilike '%{key}' "#and cardstatus = '1'"
         self.cursor.execute(insert_query)
         cardstatus = self.cursor.fetchall()
         if len(cardstatus) == 0:
@@ -100,14 +112,14 @@ class PostgessBase:
 if __name__ == '__main__':
     bd = PostgessBase()
     # a,b,c,d =bd.search_key('00000073D712')
-    # a, b, c, d = bd.search_key('00000070F8FE')
-    # print(a, b, c, d)
+    a = bd.search_key('5591')
+    print(a)
     # print(bd.select_date())
     # a = bd.search_fio('бур', '', '')
     # # print(a)
     # for _ in a:
     #     print(_)
     if bd.flag_BD:
-        print(bd.search_card('000000559188'))
-        print(bd.search_card('00000073D712'))
-        print(bd.search_card('0000003DFAD9'))
+        print(bd.search_card('000000955914'))
+    #     print(bd.search_card('00000073D712'))
+    #     print(bd.search_card('0000003DFAD9'))
