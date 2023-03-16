@@ -86,6 +86,7 @@ class MainMenu:
                         if answer:
                             sl.save_log(f"{_.surname} {_.name} {_.key} - {self.table.object_main}", f"Удаление Персоны")
                             self.person_list.remove(_)
+                            self.flag_change = True
                             break
 
                 # Обновляем записи в таблице
@@ -95,6 +96,7 @@ class MainMenu:
                 self.info_frame.title_left_down_text.set("Выберите Объект ...")
         else:
             # Получаем ключ из выбранной строки
+            self.flag_change = True
             if self.table.main_table.selection():
                 select_person = str(self.table.main_table.item(self.table.main_table.selection())['values'][3])
                 if len(select_person) < 12:
@@ -103,7 +105,7 @@ class MainMenu:
                     # Выбираем Персону соответсвующую ключу
                     if _.key == select_person:
                         # Удаляем из списка прав запись соответвующую выбранному Объекту
-                        sl.save_log(f"{_.surname} {_.name} {_.key} - {self.table.object_main}", f"Удаление Персоны")
+                        sl.save_log(f"{_.surname} {_.name} {_.key} - {self.object_list[int(self.table.object_main)].num} {self.object_list[int(self.table.object_main)].name}", f"Удаление Персоны")
                         _.permission.pop(self.table.object_main)
 
                         if len(_.permission) == 0:

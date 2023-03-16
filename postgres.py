@@ -111,14 +111,14 @@ class PostgessBase:
 if __name__ == '__main__':
     bd = PostgessBase()
     # a,b,c,d =bd.search_key('00000073D712')
-    a = bd.search_key('5591')
-    print(a)
+    # a = bd.search_key('5591')
+    # print(a)
     # print(bd.select_date())
     # a = bd.search_fio('бур', '', '')
     # # print(a)
     # for _ in a:
     #     print(_)
     if bd.flag_BD:
-        print(bd.search_card('000000955914'))
+        print(bd.search_card('0000003DE16A'))
     #     print(bd.search_card('00000073D712'))
     #     print(bd.search_card('0000003DFAD9'))
