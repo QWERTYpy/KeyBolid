@@ -119,6 +119,6 @@ if __name__ == '__main__':
     # for _ in a:
     #     print(_)
     if bd.flag_BD:
-        print(bd.search_card('0000003DE16A'))
-    #     print(bd.search_card('00000073D712'))
+        print(bd.search_key('000000822823'))
+        # print(bd.search_key('000000C3685B'))
     #     print(bd.search_card('0000003DFAD9'))

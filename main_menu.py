@@ -269,11 +269,16 @@ class MainMenu:
                             flag_key_add = False
                             continue
                     # Если ключ еще не добавлен
+
                     if flag_key_add:
                         self.info_frame.title_left_down_text.set("Добавление ключа...")
                         if self.table.bd.flag_BD:
-                            name, firstname, secondname, key = self.table.bd.search_key(self.file_key.upper())
-                            new_person = Person(name=firstname, surname=name, patronymic=secondname, key=key)
+                            print(self.file_key.upper(),'->', self.table.bd.search_key(self.file_key.upper()))
+                            name, firstname, secondname, key = self.table.bd.search_key(self.file_key.upper())[0]
+                            if key:
+                                new_person = Person(name=firstname, surname=name, patronymic=secondname, key=key)
+                            else:
+                                new_person = Person(key=self.file_key.upper())
                         else:
                             new_person = Person(key=self.file_key.upper())
                         # Если добавляется новый Объект
