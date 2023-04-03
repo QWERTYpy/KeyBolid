@@ -45,9 +45,9 @@ def save_person_ini(list_person):
         str_permission = ''
         for _perm in _.permission:
             str_permission += f"{_perm}, {_.permission[_perm][0]}, {_.permission[_perm][1]}, {_.permission[_perm][2].upper()};"
-        config[f"{_.key.upper()}"] = {'name': _.name,
-                                      'surname': _.surname,
-                                      'patronymic': _.patronymic,
+        config[f"{_.key.upper()}"] = {'name': _.name.title(),
+                                      'surname': _.surname.title(),
+                                      'patronymic': _.patronymic.title(),
                                       'permission': str_permission}
 
     # shutil.copy('example.ini', 'example_tmp.ini')
