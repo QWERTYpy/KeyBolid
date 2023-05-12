@@ -107,9 +107,22 @@ class PostgessBase:
         else:
             return cardstatus[0][0]
 
+    def search_block(self, key):
+        # Поиск заблокированного пропуска
+        key = key[-6:]  # Берём крайние 6 символов
+        # Проверяем совпадение этих 6 символов с конца
+        insert_query = f"SELECT blocked FROM staff.card WHERE fullcardcode ilike '%{key}' "  # and cardstatus = '1'"
+        self.cursor.execute(insert_query)
+        cardblock = self.cursor.fetchall()
+        if len(cardblock) == 0:
+            return 0
+        else:
+            return cardblock[0][0]
+
 
 if __name__ == '__main__':
     bd = PostgessBase()
+    print(bd.search_block('000000E10992'))
     # a,b,c,d =bd.search_key('00000073D712')
     # a = bd.search_key('5591')
     # print(a)
@@ -118,7 +131,7 @@ if __name__ == '__main__':
     # # print(a)
     # for _ in a:
     #     print(_)
-    if bd.flag_BD:
-        print(bd.search_key('000000822823'))
+    # if bd.flag_BD:
+    #     print(bd.search_key('000000822823'))
         # print(bd.search_key('000000C3685B'))
     #     print(bd.search_card('0000003DFAD9'))

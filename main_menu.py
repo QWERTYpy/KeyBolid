@@ -37,6 +37,7 @@ class MainMenu:
         self.main_menu.add_command(label="Добавить", command=self.main_menu_load_person)
         self.main_menu.add_command(label="Удалить", command=self.main_menu_delete_person)
         self.main_menu.add_command(label="Удалить возвращенные", command=self.main_menu_delete_return)
+        self.main_menu.add_command(label="Удалить заблокированные", command=self.main_menu_delete_block)
         # Если соединение с БД отсутвет, то отключаем
         if not self.table.bd.flag_BD:
             self.main_menu.entryconfig("Удалить возвращенные", state="disabled")
@@ -61,6 +62,32 @@ class MainMenu:
                             if len(__.permission) == 0:
                                 self.person_list.remove(__)
                                 break
+            # Обновляем записи в таблице
+            self.table.search_table_action()
+
+    def main_menu_delete_block(self):
+        # Удаление заблокированных пропусков
+        if self.table.object_main == '000':
+            self.info_frame.title_left_down_text.set("Выберите Объект ...")
+        else:
+            person_bd = PostgessBase()
+            # Пробегаем весь список персон соответсвующих выбранному Объекту
+            for _ in self.table.people_table:
+                # Если ключ возвращен, то удаляем его
+                if person_bd.search_block(_[3]) == 1:
+                    # Находим указатель на интересующую персону
+                    for __ in self.person_list:
+
+                        if __.key == _[3]:
+                            for ___ in self.object_list:
+                                if ___.id == self.table.object_main:
+
+                                    sl.save_log(f"{_[0]} {_[1]} {_[2]} {_[3]}- {___.num} {___.name}", f"Удаление Заблокированной Персоны")
+                                    __.permission.pop(self.table.object_main)
+
+                                    if len(__.permission) == 0:
+                                        self.person_list.remove(__)
+                                        break
             # Обновляем записи в таблице
             self.table.search_table_action()
 
