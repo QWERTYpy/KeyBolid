@@ -112,8 +112,16 @@ class Table:
         self.main_table.delete(*self.main_table.get_children())
         # Заполняем данными удовлетворяющими критериям поиска
         # Если заполнено одно из полей
+        __parazit = 0
+        for _ in self.object_list:
+            # print(_.interface, _.id, self.object_main)
+            if self.object_main == _.id and int(_.interface):
+                __parazit = 1
+                # break
+                # for _ in self.person_list:
+                #     print((_.key, (_.key, _.bit+_.key[6:])[bool(_.bit)])[__parazit],':',_.key,_.bit)
         if self.entry_surname.get() or self.entry_name.get() or self.entry_patronymic.get() or self.entry_hex.get():
-            self.people_table = [(_.surname, _.name, _.patronymic, _.key, _.get_perm_obj()) for _ in self.person_list
+            self.people_table = [(_.surname, _.name, _.patronymic, (_.key, (_.key, _.bit+_.key[6:])[bool(_.bit)])[__parazit], _.get_perm_obj()) for _ in self.person_list
                                  if not _.surname.lower().find(self.entry_surname.get().lower())
                                  and not _.name.lower().find(self.entry_name.get().lower())
                                  and not _.patronymic.lower().find(self.entry_patronymic.get().lower())
@@ -126,7 +134,7 @@ class Table:
             #                      and self.entry_hex.get().upper() in _.key.upper()
             #                      and (self.object_main in _.permission.keys() or self.object_main == '000')]
         else:
-            self.people_table = [(_.surname, _.name, _.patronymic, str(_.key), _.get_perm_obj()) for _ in
+            self.people_table = [(_.surname, _.name, _.patronymic, (_.key, (_.key, _.bit+_.key[6:])[bool(_.bit)])[__parazit], _.get_perm_obj()) for _ in
                                  self.person_list
                                  if (self.object_main in _.permission.keys() or self.object_main == '000')]
         # Выводим данные в таблицу
@@ -194,11 +202,24 @@ class Table:
         :return:
         """
         permission_list = []  # Список ключей и соответсвующих им прав
-        # Проходим по всем персонам и выбираем данные соответствующие выбранному Объекту
-        for _ in self.person_list:
-            cur_perm = _.permission.get(self.object_main)
-            if cur_perm:
-                permission_list.append([_.key, cur_perm[2]])
+        for _ in self.object_list:
+            if self.object_main == _.id:
+                if _.interface:
+                    # Проходим по всем персонам и выбираем данные соответствующие выбранному Объекту
+                    for _ in self.person_list:
+                        cur_perm = _.permission.get(self.object_main)
+                        if cur_perm:
+                            if _.bit:
+                                # self.person_cur.key[0:2] + self.person_cur.bit + self.person_cur.key[4:]
+                                permission_list.append([_.bit+_.key[6:], cur_perm[2]])
+                            else:
+                                permission_list.append([_.key, cur_perm[2]])
+                else:
+                    # Проходим по всем персонам и выбираем данные соответствующие выбранному Объекту
+                    for _ in self.person_list:
+                        cur_perm = _.permission.get(self.object_main)
+                        if cur_perm:
+                            permission_list.append([_.key, cur_perm[2]])
         # Выбираем Объект по индексу и в зависимости от типа выгружаем
         for _ in self.object_list:
             if self.object_main == _.id:

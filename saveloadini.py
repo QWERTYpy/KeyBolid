@@ -27,6 +27,10 @@ def load_person_ini():
         pers.name = config[hex_key]['name']
         pers.surname = config[hex_key]['surname']
         pers.patronymic = config[hex_key]['patronymic']
+        try:
+            pers.bit = config[hex_key]['bit']
+        except KeyError:
+            pass
         # pers.key = bytes(hex_key, 'ascii')
         pers.key = hex_key
         for _ in config[hex_key]['permission'].split(';'):
@@ -48,7 +52,8 @@ def save_person_ini(list_person):
         config[f"{_.key.upper()}"] = {'name': _.name.title(),
                                       'surname': _.surname.title(),
                                       'patronymic': _.patronymic.title(),
-                                      'permission': str_permission}
+                                      'permission': str_permission,
+                                      'bit': _.bit}
 
     # shutil.copy('example.ini', 'example_tmp.ini')
     with open(path, 'w', encoding='utf-8') as configfile:

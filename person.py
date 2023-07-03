@@ -3,12 +3,13 @@ import tkinter as tk
 
 
 class Person:
-    def __init__(self, name='', surname='', patronymic='', key=''):
+    def __init__(self, name='', surname='', patronymic='', key='', bit=''):
         self.name = name  # Имя
         self.surname = surname  # Фамилия
         self.patronymic = patronymic  # Отчество
         self.key = key  # Ключ
         self.permission = {}  # Права доступа # id_object: [Номер прибора, ХО, Доступ]
+        self.bit = bit  # Паразитный бит
 
     def get_perm_obj(self):
         _list_obj = []

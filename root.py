@@ -29,7 +29,7 @@ person_list = sl.load_person_ini()  # Список персон
 # Создаем приложение
 root = tk.Tk()
 root.protocol("WM_DELETE_WINDOW", on_closing)
-root.title("KeyBolid - v.1.5.0")
+root.title("KeyBolid - v.1.6.1 Temp")
 root.geometry("840x600+10+10")  # Создаем окно
 root.resizable(False, False)  # Запрещаем изменять размер окна
 root.configure(background='#ffffff')  # Устанавливаем цвет фона

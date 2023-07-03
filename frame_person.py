@@ -50,8 +50,11 @@ class FramePerson(tk.Toplevel):
         self.entry_name.insert(0, self.person_cur.name)
         self.entry_surname.insert(0, self.person_cur.surname)
         self.entry_patr.insert(0, self.person_cur.patronymic)
-        self.entry_hex.insert(0, self.person_cur.key)
-
+        #self.entry_hex.insert(0, self.person_cur.key)
+        if self.object_cur.interface:
+            self.entry_hex.insert(0, self.person_cur.bit+self.person_cur.key[6:])
+        else:
+            self.entry_hex.insert(0, self.person_cur.key)
     def bolid_4(self, obj: object.ObjectBolid):
         ttk.Label(self, text="Настройка:").place(x=0, y=90)
         if obj.type == '4':
