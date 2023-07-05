@@ -67,6 +67,7 @@ class FrameObject(tk.Toplevel):
                     _.interface = self.interface.get()
                     # _.ver = self.ver
                     _.comment = self.obj_text.get("1.0", tk.END)
+            sl.save_object_ini(self.object_list)
 
         else:
             index_object = []
@@ -94,3 +95,4 @@ class FrameObject(tk.Toplevel):
                 # Добавляем запись в лог
                 sl.save_log(f"{obj.id} {obj.num} - {obj.name}", f"Добавление Объекта")
                 break
+        self.destroy()
