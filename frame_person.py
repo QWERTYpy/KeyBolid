@@ -51,16 +51,16 @@ class FramePerson(tk.Toplevel):
         self.entry_surname.insert(0, self.person_cur.surname)
         self.entry_patr.insert(0, self.person_cur.patronymic)
         #self.entry_hex.insert(0, self.person_cur.key)
+        self.entry_hex.insert(0, self.person_cur.key)
         if int(self.object_cur.interface):
-            self.entry_hex.insert(0, self.person_cur.bit+self.person_cur.key[6:])
-        else:
-            self.entry_hex.insert(0, self.person_cur.key)
+            self.entry_bit.insert(0, self.person_cur.bit)
+
     def bolid_4(self, obj: object.ObjectBolid):
-        ttk.Label(self, text="Настройка:").place(x=0, y=90)
+        ttk.Label(self, text="Настройка:").place(x=0, y=110)
         if obj.type == '4':
             obj_type = 'C2000-4'
-        ttk.Label(self, text=obj_type).place(x=100, y=90)
-        ttk.Label(self, text=obj.name).place(x=200, y=90)
+        ttk.Label(self, text=obj_type).place(x=100, y=110)
+        ttk.Label(self, text=obj.name).place(x=200, y=110)
 
         self.object_c2000_4 = C2000_4(self, self.person_cur, obj.id)
         self.obj_text = tk.Text(self, width=44, height=4)
@@ -69,11 +69,11 @@ class FramePerson(tk.Toplevel):
         self.obj_text.configure(state=tk.DISABLED)
 
     def bolid_10(self, obj: object.ObjectBolid):
-        ttk.Label(self, text="Настройка:").place(x=0, y=90)
+        ttk.Label(self, text="Настройка:").place(x=0, y=110)
         if obj.type == '10':
             obj_type = 'Сигнал10'
-        ttk.Label(self, text=obj_type).place(x=100, y=90)
-        ttk.Label(self, text=obj.name).place(x=200, y=90)
+        ttk.Label(self, text=obj_type).place(x=100, y=110)
+        ttk.Label(self, text=obj.name).place(x=200, y=110)
         self.object_signl10 = Signal10(self, self.person_cur, obj.id)
         self.obj_text = tk.Text(self, width=44, height=4)
         self.obj_text.place(x=10, y=230)
@@ -109,6 +109,11 @@ class FramePerson(tk.Toplevel):
 
         self.search_btn = ttk.Button(self, text='Искать', command=self.click_btn_search)
         self.search_btn.place(x=250, y=60)
+
+        self.label_bit = ttk.Label(self, text="Доп. ключ:")
+        self.label_bit.place(x=0, y=80)
+        self.entry_bit = ttk.Entry(self)
+        self.entry_bit.place(x=100, y=80)
 
     def get_bd(self):
         self.frame_get_bd = Get_BD(self, self.entry_hex.get())
@@ -155,6 +160,7 @@ class FramePerson(tk.Toplevel):
         self.person_cur.surname = self.entry_surname.get()
         self.person_cur.patronymic = self.entry_patr.get()
         self.person_cur.key = self.entry_hex.get().upper()
+        self.person_cur.bit = self.entry_bit.get().upper()
         if self.object_cur.type == '10':
             self.person_cur.permission[self.object_cur.id][2] = self.person_cur.convert_check_10(
                 self.object_signl10.get_checkbox())
