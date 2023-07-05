@@ -11,6 +11,5 @@ class ObjectBolid:
         self.interface = 0  # 0 Если не нужен паразитный бит, 1 Если нужен
         self.comment = ''  # Комментарий
 
-
     def show(self):
-        print(self.num,self.id,self.name,self.type,self.ver,self.comment)
+        print(self.num, self.id, self.name, self.type, self.ver, self.comment)

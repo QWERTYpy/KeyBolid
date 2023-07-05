@@ -5,6 +5,7 @@ import frame_person as fp
 import c20004
 import sig10
 from postgres import PostgessBase
+from frame_object import FrameObject
 
 
 class Table:
@@ -192,9 +193,24 @@ class Table:
         # Создаем кнопку для выгрузки
         self.export_btn = ttk.Button(self.root, text='Выгрузить', command=self.export_btn_press)
         self.export_btn.place(x=450, y=9)
+        # Кнопка для редактирования
+        self.edit_btn = ttk.Button(self.root, text='Править', command=self.edit_btn_press)
+        self.edit_btn.place(x=590, y=9)
         # Если Объект не выбран, то деактивируем кнопку
         if self.object_main == "000":
             self.export_btn['state'] = 'disabled'
+            self.edit_btn['state'] = 'disabled'
+
+    def edit_btn_press(self):
+        print('1')
+        for _ in self.object_list:
+            if self.object_main == _.id:
+                print('2')
+                frame_object = FrameObject(self.root, _.type, _.ver, _.num, self.object_list, _.name, _.comment, _.interface, _.id)
+                frame_object.geometry("260x250+50+50")
+                frame_object.title('Добавление нового Объекта')
+                frame_object.grab_set()
+                frame_object.wait_window()
 
     def export_btn_press(self):
         """
@@ -243,6 +259,7 @@ class Table:
             self.object_main = self.object_dict[self.combobox_obj_var.get()]
             # Включаем кнопку экспорта
             self.export_btn['state'] = 'enabled'
+            self.edit_btn['state'] = 'enabled'
             for _ in self.object_list:
                 if self.object_main == _.id:
                     self.export_btn['text'] = f"Выгрузить для {_.num}"
