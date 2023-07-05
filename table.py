@@ -202,10 +202,8 @@ class Table:
             self.edit_btn['state'] = 'disabled'
 
     def edit_btn_press(self):
-        print('1')
         for _ in self.object_list:
             if self.object_main == _.id:
-                print('2')
                 frame_object = FrameObject(self.root, _.type, _.ver, _.num, self.object_list, _.name, _.comment, _.interface, _.id)
                 frame_object.geometry("260x250+50+50")
                 frame_object.title('Добавление нового Объекта')
