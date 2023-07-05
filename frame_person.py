@@ -25,7 +25,7 @@ class FramePerson(tk.Toplevel):
                 self.object_cur = __
         for _ in self.person_list:
             # print(type(_.key), type(self.key))
-            if _.key == self.key:
+            if _.key[6:] == self.key[6:]:
                 self.flag_add_new = False
                 self.person_cur = _
         if not self.key:
@@ -51,7 +51,7 @@ class FramePerson(tk.Toplevel):
         self.entry_surname.insert(0, self.person_cur.surname)
         self.entry_patr.insert(0, self.person_cur.patronymic)
         #self.entry_hex.insert(0, self.person_cur.key)
-        if self.object_cur.interface:
+        if int(self.object_cur.interface):
             self.entry_hex.insert(0, self.person_cur.bit+self.person_cur.key[6:])
         else:
             self.entry_hex.insert(0, self.person_cur.key)
