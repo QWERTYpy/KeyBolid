@@ -16,7 +16,7 @@ class Table:
         self.person_list = person_list  # Список Персон
         self.info_frame = info_frame  # Указатель на информационное поле
         self.object_main = '000'  # По умолчанию выбран Объект 000 - Все
-        self.object_list_len = len(object_list)  # Колличество Объектов
+        self.object_list_len = len(object_list)  # Количество Объектов
         # Добавление элемента для выбора конкретного Объекта
         self.combobox_sort()
         # Добавление полей для поиска по Персонам
@@ -218,7 +218,7 @@ class Table:
         permission_list = []  # Список ключей и соответсвующих им прав
         for _ in self.object_list:
             if self.object_main == _.id:
-                if _.interface:
+                if int(_.interface):
                     # Проходим по всем персонам и выбираем данные соответствующие выбранному Объекту
                     for _ in self.person_list:
                         cur_perm = _.permission.get(self.object_main)

@@ -5,10 +5,7 @@ import saveloadini as sl
 import object
 from bolid_perm import Signal10, C2000_4
 
-# Добавть редактирование описания Объекта
-
-
-# Всплывающее меню при создании или редактировании информации о объекте
+# Всплывающее меню при создании или редактировании информации об объекте
 class FrameObject(tk.Toplevel):
     def __init__(self, parent, type_object, ver, open_object, object_list, name='', comment='', interface='', id=''):
         super().__init__(parent)
